@@ -1,0 +1,1276 @@
+﻿<Window x:Class="POS_BIGA.Views.Windows.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="إعدادات النظام" 
+        WindowState="Maximized"
+        MinHeight="800" MinWidth="1000"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        FontFamily="Segoe UI">
+
+    <Window.Resources>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="10" ShadowDepth="2" Opacity="0.2" Color="#000000"/>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#D32F2F"/>
+        <SolidColorBrush x:Key="SuccessBrush" Color="#4CAF50"/>
+        <SolidColorBrush x:Key="InfoBrush" Color="#1976D2"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 🎯 Header Section -->
+        <materialDesign:Card Grid.Row="0" Padding="24,18" Margin="20,20,20,0" 
+                             UniformCornerRadius="12" Effect="{StaticResource CardShadow}"
+                             Background="{StaticResource PrimaryBrush}">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="Cog" Foreground="White" Width="36" Height="36" 
+                                        VerticalAlignment="Center" Margin="0,0,16,0"/>
+                <StackPanel>
+                    <TextBlock Text="إعدادات النظام" Foreground="White" FontSize="26" FontWeight="Bold"/>
+                    <TextBlock Text="إدارة إعدادات المتجر والطباعة وقاعدة البيانات" 
+                              Foreground="White" FontSize="14" Opacity="0.9" Margin="0,4,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <!-- 📋 TabControl Section -->
+        <TabControl Grid.Row="1" Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+                    TabStripPlacement="Right" Margin="20,16,20,0" Background="Transparent">
+
+            <TabControl.Resources>
+                <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+                    <Setter Property="MinWidth" Value="180" />
+                    <Setter Property="Padding" Value="16,10" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+            </TabControl.Resources>
+
+            <!-- 🏪 بيانات المتجر -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Vertical" Margin="8" HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="Store" Width="28" Height="28" Margin="0,0,0,8"/>
+                        <TextBlock Text="بيانات المتجر" FontSize="13" FontWeight="SemiBold" 
+                                  TextAlignment="Center" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10,0,20,10">
+                    <materialDesign:Card Padding="32" Margin="10" 
+                                        materialDesign:ElevationAssist.Elevation="Dp3"
+                                        UniformCornerRadius="12">
+                        <StackPanel MaxWidth="650" HorizontalAlignment="Stretch">
+                            <!-- العنوان -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                                <materialDesign:PackIcon Kind="Information" Width="24" Height="24" 
+                                                        Foreground="{StaticResource InfoBrush}" 
+                                                        VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="المعلومات الأساسية" FontSize="20" FontWeight="Bold" 
+                                          Foreground="{StaticResource PrimaryBrush}"/>
+                            </StackPanel>
+
+                            <TextBox Text="{Binding ShopName}" 
+                                    materialDesign:HintAssist.Hint="اسم المحل / الشركة *"
+                                    materialDesign:HintAssist.IsFloating="True" 
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                    Margin="0,0,0,18" FontSize="15"/>
+
+                            <TextBox Text="{Binding ShopPhone}" 
+                                    materialDesign:HintAssist.Hint="رقم الهاتف"
+                                    materialDesign:HintAssist.IsFloating="True" 
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                    Margin="0,0,0,18" FontSize="15"/>
+
+                            <TextBox Text="{Binding ShopAddress}" 
+                                    materialDesign:HintAssist.Hint="العنوان الكامل"
+                                    materialDesign:HintAssist.IsFloating="True" 
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                    Margin="0,0,0,24" Height="90" 
+                                    TextWrapping="Wrap" AcceptsReturn="True" 
+                                    VerticalScrollBarVisibility="Auto" FontSize="15"/>
+
+                            <Separator Margin="0,0,0,24" Background="{DynamicResource MaterialDesignDivider}"/>
+
+                            <!-- الإعدادات المالية -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <materialDesign:PackIcon Kind="CurrencyUsd" Width="24" Height="24" 
+                                                        Foreground="{StaticResource SuccessBrush}" 
+                                                        VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="الإعدادات المالية" FontSize="20" FontWeight="Bold" 
+                                          Foreground="{StaticResource PrimaryBrush}"/>
+                            </StackPanel>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0" 
+                                        Text="{Binding Currency}" 
+                                        materialDesign:HintAssist.Hint="العملة (مثال: MAD)"
+                                        materialDesign:HintAssist.IsFloating="True" 
+                                        Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                        FontSize="15"/>
+
+                                <TextBox Grid.Column="2" 
+                                        Text="{Binding TaxRate}" 
+                                        materialDesign:HintAssist.Hint="نسبة الضريبة (%)"
+                                        materialDesign:HintAssist.IsFloating="True" 
+                                        Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                        FontSize="15"/>
+                            </Grid>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- 💳 الائتمان والديون -->
+
+            <!-- 🖨️ الطباعة -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Vertical" Margin="8" HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="Printer" Width="28" Height="28" Margin="0,0,0,8"/>
+                        <TextBlock Text="الطباعة" FontSize="13" FontWeight="SemiBold" 
+                                  TextAlignment="Center" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer Padding="10,0,20,10">
+                    <materialDesign:Card Padding="32" Margin="10" 
+                                        materialDesign:ElevationAssist.Elevation="Dp3"
+                                        UniformCornerRadius="12">
+                        <StackPanel MaxWidth="650" HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                                <materialDesign:PackIcon Kind="Receipt" Width="24" Height="24" 
+                                                        Foreground="{StaticResource InfoBrush}" 
+                                                        VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="إعدادات الفواتير" FontSize="20" FontWeight="Bold" 
+                                          Foreground="{StaticResource PrimaryBrush}"/>
+                            </StackPanel>
+
+                            <!-- اختيار الطابعة -->
+                            <TextBlock Text="الطابعة" FontSize="14" FontWeight="SemiBold" 
+                                      Opacity="0.7" Margin="0,0,0,8"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                <ComboBox ItemsSource="{Binding InstalledPrinters}" 
+                                         SelectedValue="{Binding ReceiptPrinter}" 
+                                         Width="300" Height="40" Margin="0,0,12,0"
+                                         Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
+
+                                <Button Width="90" Height="40" Margin="0,0,8,0"
+                                       Command="{Binding RefreshPrintersCommand}"
+                                       Style="{StaticResource MaterialDesignOutlinedButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Refresh" Width="18" Height="18" Margin="0,0,6,0"/>
+                                        <TextBlock Text="تحديث"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Width="110" Height="40"
+                                       Command="{Binding PrintTestCommand}"
+                                       Style="{StaticResource MaterialDesignRaisedButton}"
+                                       Background="{StaticResource SuccessBrush}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="PrinterCheck" Width="18" Height="18" Margin="0,0,6,0"/>
+                                        <TextBlock Text="طباعة اختبار"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+
+                            <TextBox Text="{Binding ReceiptPrinter}" 
+                                    materialDesign:HintAssist.Hint="أو أدخل اسم الطابعة يدوياً"
+                                    materialDesign:HintAssist.IsFloating="True" 
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                    Margin="0,0,0,24" FontSize="15"/>
+
+                            <Separator Margin="0,0,0,20" Background="{DynamicResource MaterialDesignDivider}"/>
+
+                            <!-- رسالة الفاتورة -->
+                            <TextBox Text="{Binding InvoiceMessage}" 
+                                    materialDesign:HintAssist.Hint="رسالة الترحيب أسفل الفاتورة (مثال: شكراً لزيارتكم)"
+                                    materialDesign:HintAssist.IsFloating="True" 
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                    Height="100" Margin="0,0,0,20"
+                                    TextWrapping="Wrap" AcceptsReturn="True" 
+                                    VerticalScrollBarVisibility="Auto" FontSize="15"/>
+
+                            <!-- قالب الفاتورة -->
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ComboBox Grid.Column="0"
+                                         ItemsSource="{Binding AvailableTemplates}" 
+                                         SelectedItem="{Binding SelectedTemplate}"
+                                         materialDesign:HintAssist.Hint="قالب الفاتورة"
+                                         materialDesign:HintAssist.IsFloating="True"
+                                         Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                         FontSize="15"/>
+                            </Grid>
+
+                            <!-- 🖨️ التحكم في الطباعة التلقائية -->
+                            <materialDesign:Card Background="#F3F4F6" Padding="20"
+                                                 UniformCornerRadius="10" Margin="0,0,0,20">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="16"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- أيقونة -->
+                                    <Border Grid.Column="0" Width="44" Height="44" CornerRadius="10"
+                                            VerticalAlignment="Center">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#E0E0E0"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding AutoPrint}" Value="True">
+                                                        <Setter Property="Background" Value="#E8F5E9"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <materialDesign:PackIcon Width="24" Height="24"
+                                                                 HorizontalAlignment="Center"
+                                                                 VerticalAlignment="Center">
+                                            <materialDesign:PackIcon.Style>
+                                                <Style TargetType="materialDesign:PackIcon">
+                                                    <Setter Property="Kind" Value="PrinterOff"/>
+                                                    <Setter Property="Foreground" Value="#9E9E9E"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding AutoPrint}" Value="True">
+                                                            <Setter Property="Kind" Value="Printer"/>
+                                                            <Setter Property="Foreground" Value="#388E3C"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </materialDesign:PackIcon.Style>
+                                        </materialDesign:PackIcon>
+                                    </Border>
+
+                                    <!-- النص -->
+                                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                        <TextBlock FontSize="15" FontWeight="SemiBold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="الطباعة التلقائية — مُعطَّلة"/>
+                                                    <Setter Property="Foreground" Value="#757575"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding AutoPrint}" Value="True">
+                                                            <Setter Property="Text" Value="الطباعة التلقائية — مُفعَّلة"/>
+                                                            <Setter Property="Foreground" Value="#388E3C"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <TextBlock FontSize="12" Opacity="0.6" Margin="0,4,0,0"
+                                                   Text="طباعة الفاتورة تلقائياً بمجرد إتمام عملية البيع"/>
+                                    </StackPanel>
+
+                                    <!-- مفتاح التبديل -->
+                                    <ToggleButton Grid.Column="3"
+                                                 IsChecked="{Binding AutoPrint}"
+                                                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                 Width="50" Height="28"
+                                                 VerticalAlignment="Center"/>
+                                </Grid>
+                            </materialDesign:Card>
+
+                            <!-- أزرار التخصيص -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <Button Width="150" Height="40" Margin="0,0,12,0"
+                                       Command="{Binding CustomizeTemplateCommand}" 
+                                       Style="{StaticResource MaterialDesignOutlinedButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="PaletteOutline" Width="18" Height="18" Margin="0,0,6,0"/>
+                                        <TextBlock Text="تخصيص القالب"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Width="150" Height="40"
+                                       Command="{Binding PreviewTemplateCommand}"
+                                       Style="{StaticResource MaterialDesignOutlinedButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="EyeOutline" Width="18" Height="18" Margin="0,0,6,0"/>
+                                        <TextBlock Text="معاينة القالب"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+
+                            <!-- إعدادات متقدمة -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                        Text="{Binding ReceiptWidthMm}"
+                                        materialDesign:HintAssist.Hint="عرض الفاتورة (مم)"
+                                        materialDesign:HintAssist.IsFloating="True"
+                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                        FontSize="15"/>
+
+                                <CheckBox Grid.Column="2"
+                                         Content="فرض ESC/POS" 
+                                         IsChecked="{Binding ForceEscPos}"
+                                         VerticalAlignment="Bottom" Height="40"
+                                         FontSize="14"/>
+                            </Grid>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- 📊 أقسام التقارير - تاب موحد -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Vertical" Margin="8" HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="FormatListChecks" Width="28" Height="28" Margin="0,0,0,8"/>
+                        <TextBlock Text="أقسام التقارير" FontSize="13" FontWeight="SemiBold"
+                                   TextAlignment="Center" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10,0,20,10">
+                    <materialDesign:Card Padding="28" Margin="10"
+                                        materialDesign:ElevationAssist.Elevation="Dp3"
+                                        UniformCornerRadius="12">
+                        <materialDesign:Card.Resources>
+                            <Style x:Key="SwitchRow" TargetType="materialDesign:Card">
+                                <Setter Property="Background" Value="#F8FAFC"/>
+                                <Setter Property="Padding" Value="14,10"/>
+                                <Setter Property="UniformCornerRadius" Value="8"/>
+                                <Setter Property="Margin" Value="0,0,0,6"/>
+                            </Style>
+                        </materialDesign:Card.Resources>
+                        <StackPanel>
+
+                            <!-- عنوان -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <materialDesign:PackIcon Kind="FormatListChecks" Width="24" Height="24"
+                                                         Foreground="{StaticResource InfoBrush}"
+                                                         VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <StackPanel>
+                                    <TextBlock Text="تخصيص أقسام التقارير" FontSize="20" FontWeight="Bold"
+                                               Foreground="{StaticResource PrimaryBrush}"/>
+                                    <TextBlock Text="اختر ما يظهر في كل نوع من التقارير"
+                                               FontSize="13" Opacity="0.6" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- رؤوس الأعمدة -->
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="90"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="القسم" FontWeight="Bold" FontSize="13" Opacity="0.7"/>
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="PrinterPos" Width="18" Height="18" HorizontalAlignment="Center" Foreground="#FF6B35"/>
+                                    <TextBlock Text="حراري" FontSize="11" FontWeight="SemiBold" Foreground="#FF6B35" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="FileChart" Width="18" Height="18" HorizontalAlignment="Center" Foreground="{StaticResource InfoBrush}"/>
+                                    <TextBlock Text="A4/PDF" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource InfoBrush}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Separator Margin="0,0,0,10" Opacity="0.3"/>
+
+                            <!-- رأس التقرير -->
+                            <materialDesign:Card Style="{StaticResource SwitchRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="🏪 رأس التقرير" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="اسم المتجر، العنوان، الهاتف" FontSize="11" Opacity="0.55" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <ToggleButton Grid.Column="1" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding ReportShowHeader}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="2" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding A4ReportShowHeader}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </materialDesign:Card>
+
+                            <!-- ملخص الأداء -->
+                            <materialDesign:Card Style="{StaticResource SwitchRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="📊 ملخص الأداء" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="المبيعات، الأرباح، الفواتير، هامش الربح، النمو" FontSize="11" Opacity="0.55" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <ToggleButton Grid.Column="1" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding ReportShowSummary}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="2" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding A4ReportShowSummary}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </materialDesign:Card>
+
+                            <!-- ملخص الديون -->
+                            <materialDesign:Card Style="{StaticResource SwitchRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="💳 ملخص الديون" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="إجمالي الديون، المدفوع، المتبقي، نسبة التسديد" FontSize="11" Opacity="0.55" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <ToggleButton Grid.Column="1" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding ReportShowCredits}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="2" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding A4ReportShowCredits}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </materialDesign:Card>
+
+                            <!-- قائمة زبائن الكريدي -->
+                            <materialDesign:Card Style="{StaticResource SwitchRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="👤 قائمة زبائن الكريدي" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="أسماء الزبائن ومبالغ ديونهم المتبقية" FontSize="11" Opacity="0.55" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <ToggleButton Grid.Column="1" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding ReportShowCreditsList}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="2" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding A4ReportShowCreditsList}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </materialDesign:Card>
+
+                            <!-- تفاصيل زبائن الكريدي -->
+                            <materialDesign:Card Style="{StaticResource SwitchRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="📋 تفاصيل زبائن الكريدي" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="المبلغ الأصلي، المدفوع، المتبقي، التاريخ لكل دين" FontSize="11" Opacity="0.55" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <ToggleButton Grid.Column="1" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding ReportShowCreditDetails}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="2" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding A4ReportShowCreditDetails}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </materialDesign:Card>
+
+                            <!-- أفضل المنتجات -->
+                            <materialDesign:Card Style="{StaticResource SwitchRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="🏆 أفضل 10 منتجات" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="أكثر المنتجات مبيعاً خلال الفترة" FontSize="11" Opacity="0.55" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <ToggleButton Grid.Column="1" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding ReportShowTopProducts}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="2" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding A4ReportShowTopProducts}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </materialDesign:Card>
+
+                            <!-- المنتجات المباعة -->
+                            <materialDesign:Card Style="{StaticResource SwitchRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="🛒 المنتجات المباعة" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="قائمة كل المنتجات المباعة مع الكميات والأسعار" FontSize="11" Opacity="0.55" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <ToggleButton Grid.Column="1" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding ReportShowSoldProducts}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="2" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding A4ReportShowSoldProducts}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </materialDesign:Card>
+
+                            <!-- مبيعات الفئات -->
+                            <materialDesign:Card Style="{StaticResource SwitchRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="📦 مبيعات الفئات" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="إيرادات كل فئة ونسبتها من الإجمالي" FontSize="11" Opacity="0.55" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <ToggleButton Grid.Column="1" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding ReportShowCategories}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="2" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding A4ReportShowCategories}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </materialDesign:Card>
+
+                            <!-- المبيعات اليومية -->
+                            <materialDesign:Card Style="{StaticResource SwitchRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="📅 المبيعات اليومية" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="آخر 30 يوم من المبيعات اليومية" FontSize="11" Opacity="0.55" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <ToggleButton Grid.Column="1" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding ReportShowDailySales}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="2" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  IsChecked="{Binding A4ReportShowDailySales}" Width="46" Height="26" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </materialDesign:Card>
+
+                            <!-- ملاحظة -->
+                            <Border Background="#E3F2FD" BorderBrush="#1976D2" BorderThickness="1"
+                                    CornerRadius="6" Padding="12" Margin="0,12,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Information" Width="20" Height="20"
+                                                             Foreground="{StaticResource InfoBrush}"
+                                                             VerticalAlignment="Top" Margin="0,2,10,0"/>
+                                    <TextBlock TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource InfoBrush}">
+                                        <Run Text="ملاحظة:" FontWeight="Bold"/>
+                                        <Run Text="احفظ الإعدادات لتطبيق التغييرات. العمود الأول للطابعة الحرارية، والثاني لطباعة A4 وتصدير PDF."/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </materialDesign:Card>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- 🌐 الشبكة والـ API -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Vertical" Margin="8" HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="AccessPoint" Width="28" Height="28" Margin="0,0,0,8"/>
+                        <TextBlock Text="الشبكة / API" FontSize="13" FontWeight="SemiBold"
+                                   TextAlignment="Center" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10,0,20,10">
+                    <materialDesign:Card Padding="32" Margin="10"
+                                        materialDesign:ElevationAssist.Elevation="Dp3"
+                                        UniformCornerRadius="12">
+                        <StackPanel MaxWidth="650" HorizontalAlignment="Stretch">
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                                <materialDesign:PackIcon Kind="AccessPoint" Width="24" Height="24"
+                                                        Foreground="{StaticResource InfoBrush}"
+                                                        VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <TextBlock Text="إعدادات الشبكة والـ API" FontSize="20" FontWeight="Bold"
+                                          Foreground="{StaticResource PrimaryBrush}"/>
+                            </StackPanel>
+
+                            <TextBox Text="{Binding ApiBaseUrl, UpdateSourceTrigger=PropertyChanged}"
+                                    materialDesign:HintAssist.Hint="رابط الـ API (مثال: http://192.168.1.10:5000)"
+                                    materialDesign:HintAssist.IsFloating="True"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    Margin="0,0,0,12" FontSize="15"/>
+
+                            <Border Background="#E3F2FD" BorderBrush="#1976D2" BorderThickness="1"
+                                   CornerRadius="6" Padding="12" Margin="0,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Information" Width="20" Height="20"
+                                                            Foreground="{StaticResource InfoBrush}"
+                                                            VerticalAlignment="Top" Margin="0,2,10,0"/>
+                                    <TextBlock TextWrapping="Wrap" FontSize="13" Foreground="{StaticResource InfoBrush}">
+                                        <Run Text="ملاحظة:" FontWeight="Bold"/>
+                                        <Run Text="أدخل عنوان IP الخاص بالخادم (PC) على الشبكة المحلية. يُستخدم لعرض صور المنتجات في التطبيق المحمول. اتركه فارغاً لاستخدام localhost."/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </materialDesign:Card>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- 💾 النسخ الاحتياطي واستعادة قاعدة البيانات -->
+            <TabItem DataContext="{Binding Backup}">
+                <TabItem.Header>
+                    <StackPanel Orientation="Vertical" Margin="8" HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="DatabaseExport" Width="28" Height="28" Margin="0,0,0,8"/>
+                        <TextBlock Text="النسخ الاحتياطي" FontSize="13" FontWeight="SemiBold"
+                                   TextAlignment="Center" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10,0,20,10">
+                    <StackPanel Margin="10">
+
+                        <!-- ═══ إنشاء نسخة احتياطية ═══ -->
+                        <materialDesign:Card Padding="28" Margin="0,0,0,16"
+                                             materialDesign:ElevationAssist.Elevation="Dp3"
+                                             UniformCornerRadius="12">
+                            <StackPanel>
+                                <!-- عنوان -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="42" Height="42" CornerRadius="10" Background="#E3F2FD">
+                                        <materialDesign:PackIcon Kind="DatabaseExport" Width="24" Height="24"
+                                                                 Foreground="#1976D2"
+                                                                 HorizontalAlignment="Center"
+                                                                 VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="إنشاء نسخة احتياطية" FontSize="18" FontWeight="Bold"
+                                                   Foreground="#1976D2"/>
+                                        <TextBlock Text="حفظ قاعدة البيانات كملف .bak" FontSize="12" Opacity="0.6"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- مجلد الحفظ -->
+                                <TextBlock Text="مجلد الحفظ" FontSize="13" FontWeight="SemiBold"
+                                           Opacity="0.7" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="12"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="8"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0"
+                                             Text="{Binding BackupFolder, UpdateSourceTrigger=PropertyChanged}"
+                                             materialDesign:HintAssist.Hint="مسار مجلد حفظ النسخ الاحتياطية"
+                                             materialDesign:HintAssist.IsFloating="True"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="14"/>
+                                    <Button Grid.Column="2" Height="40" Width="120"
+                                            Command="{Binding BrowseFolderCommand}"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FolderOpen" Width="18" Height="18" Margin="0,0,6,0"/>
+                                            <TextBlock Text="تصفح"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Grid.Column="4" Height="40" Width="120"
+                                            Command="{Binding OpenFolderCommand}"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FolderEye" Width="18" Height="18" Margin="0,0,6,0"/>
+                                            <TextBlock Text="فتح المجلد"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+
+                                <!-- زر الحفظ -->
+                                <Button Margin="0,16,0,0" Height="48" Width="220"
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding BackupCommand}"
+                                        IsEnabled="{Binding IsIdle}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Background="#1976D2">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="ContentSave" Width="22" Height="22" Margin="0,0,10,0"/>
+                                        <TextBlock Text="إنشاء نسخة احتياطية الآن" FontSize="14" FontWeight="Medium"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </materialDesign:Card>
+
+                        <!-- ═══ استعادة نسخة احتياطية ═══ -->
+                        <materialDesign:Card Padding="28" Margin="0,0,0,16"
+                                             materialDesign:ElevationAssist.Elevation="Dp3"
+                                             UniformCornerRadius="12">
+                            <StackPanel>
+                                <!-- عنوان -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="42" Height="42" CornerRadius="10" Background="#FFF3E0">
+                                        <materialDesign:PackIcon Kind="DatabaseImport" Width="24" Height="24"
+                                                                 Foreground="#F57C00"
+                                                                 HorizontalAlignment="Center"
+                                                                 VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="استعادة نسخة احتياطية" FontSize="18" FontWeight="Bold"
+                                                   Foreground="#F57C00"/>
+                                        <TextBlock Text="استيراد ملف .bak واستعادة قاعدة البيانات" FontSize="12" Opacity="0.6"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- تحذير -->
+                                <Border Background="#FFF8E1" BorderBrush="#FFA726" BorderThickness="1"
+                                        CornerRadius="8" Padding="14,10" Margin="0,0,0,16">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="AlertCircle" Width="22" Height="22"
+                                                                 Foreground="#F57C00" VerticalAlignment="Top"
+                                                                 Margin="0,2,10,0"/>
+                                        <TextBlock TextWrapping="Wrap" FontSize="13" Foreground="#E65100">
+                                            <Run FontWeight="Bold" Text="تحذير: "/>
+                                            <Run Text="ستُستبدَل قاعدة البيانات الحالية بالكامل. يُنصح بإنشاء نسخة احتياطية أولاً قبل الاستعادة."/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- اختيار الملف -->
+                                <TextBlock Text="ملف النسخة الاحتياطية" FontSize="13" FontWeight="SemiBold"
+                                           Opacity="0.7" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="12"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0"
+                                             Text="{Binding SelectedRestoreFile, UpdateSourceTrigger=PropertyChanged}"
+                                             materialDesign:HintAssist.Hint="مسار ملف النسخة الاحتياطية (.bak)"
+                                             materialDesign:HintAssist.IsFloating="True"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="14"/>
+                                    <Button Grid.Column="2" Height="40" Width="120"
+                                            Command="{Binding BrowseFileCommand}"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileSearch" Width="18" Height="18" Margin="0,0,6,0"/>
+                                            <TextBlock Text="اختر ملف"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+
+                                <!-- زر الاستعادة -->
+                                <Button Margin="0,16,0,0" Height="48" Width="200"
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding RestoreCommand}"
+                                        IsEnabled="{Binding IsIdle}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Background="#F57C00">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="DatabaseRefresh" Width="22" Height="22" Margin="0,0,10,0"/>
+                                        <TextBlock Text="استعادة قاعدة البيانات" FontSize="14" FontWeight="Medium"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </materialDesign:Card>
+
+                        <!-- ═══ قائمة النسخ الموجودة ═══ -->
+                        <materialDesign:Card Padding="28"
+                                             materialDesign:ElevationAssist.Elevation="Dp3"
+                                             UniformCornerRadius="12">
+                            <StackPanel>
+                                <!-- عنوان + تحديث -->
+                                <Grid Margin="0,0,0,16">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="42" Height="42" CornerRadius="10" Background="#E8F5E9">
+                                            <materialDesign:PackIcon Kind="DatabaseSearch" Width="24" Height="24"
+                                                                     Foreground="#388E3C"
+                                                                     HorizontalAlignment="Center"
+                                                                     VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="النسخ الاحتياطي المحفوظة" FontSize="18" FontWeight="Bold"
+                                                       Foreground="#388E3C"/>
+                                            <TextBlock FontSize="12" Opacity="0.6">
+                                                <Run Text="عدد النسخ:"/>
+                                                <Run Text="{Binding BackupFiles.Count, Mode=OneWay}"/>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <Button HorizontalAlignment="Left" Height="36" Width="110"
+                                            Command="{Binding RefreshListCommand}"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Refresh" Width="18" Height="18" Margin="0,0,6,0"/>
+                                            <TextBlock Text="تحديث"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+
+                                <!-- القائمة -->
+                                <Border BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                        BorderThickness="1" CornerRadius="8">
+                                    <ItemsControl ItemsSource="{Binding BackupFiles}"
+                                                  MinHeight="80" MaxHeight="280">
+                                        <ItemsControl.Template>
+                                            <ControlTemplate TargetType="ItemsControl">
+                                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                    <StackPanel>
+                                                        <!-- رأس الجدول -->
+                                                        <Grid Background="#F5F5F5" Height="36">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="110"/>
+                                                                <ColumnDefinition Width="150"/>
+                                                                <ColumnDefinition Width="120"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="اسم الملف" FontWeight="Bold"
+                                                                       FontSize="12" Opacity="0.7" Margin="12,0,0,0"
+                                                                       VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="1" Text="الحجم" FontWeight="Bold"
+                                                                       FontSize="12" Opacity="0.7" TextAlignment="Center"
+                                                                       VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="2" Text="تاريخ الإنشاء" FontWeight="Bold"
+                                                                       FontSize="12" Opacity="0.7" TextAlignment="Center"
+                                                                       VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="3" Text="إجراء" FontWeight="Bold"
+                                                                       FontSize="12" Opacity="0.7" TextAlignment="Center"
+                                                                       VerticalAlignment="Center"/>
+                                                        </Grid>
+                                                        <Separator Opacity="0.3"/>
+                                                        <ItemsPresenter/>
+                                                        <!-- رسالة إذا لم توجد نسخ -->
+                                                        <TextBlock Text="لا توجد نسخ احتياطية في هذا المجلد"
+                                                                   FontSize="14" Opacity="0.5" Margin="0,20"
+                                                                   HorizontalAlignment="Center">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding DataContext.BackupFiles.Count,
+                                                                            RelativeSource={RelativeSource AncestorType=materialDesign:Card},
+                                                                            Mode=OneWay}"
+                                                                                     Value="0">
+                                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </ScrollViewer>
+                                            </ControlTemplate>
+                                        </ItemsControl.Template>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Height="44">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="110"/>
+                                                        <ColumnDefinition Width="150"/>
+                                                        <ColumnDefinition Width="120"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0" Orientation="Horizontal"
+                                                                VerticalAlignment="Center" Margin="12,0,0,0">
+                                                        <materialDesign:PackIcon Kind="DatabaseCheck" Width="18" Height="18"
+                                                                                 Foreground="#388E3C" Margin="0,0,8,0"
+                                                                                 VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding FileName}" FontSize="13"
+                                                                   TextTrimming="CharacterEllipsis"
+                                                                   VerticalAlignment="Center" ToolTip="{Binding FilePath}"/>
+                                                    </StackPanel>
+                                                    <TextBlock Grid.Column="1" Text="{Binding SizeText}"
+                                                               FontSize="13" TextAlignment="Center"
+                                                               VerticalAlignment="Center" Opacity="0.8"/>
+                                                    <TextBlock Grid.Column="2"
+                                                               Text="{Binding CreatedAt, StringFormat='{}{0:yyyy/MM/dd HH:mm}'}"
+                                                               FontSize="12" TextAlignment="Center"
+                                                               VerticalAlignment="Center" Opacity="0.7"/>
+                                                    <StackPanel Grid.Column="3" Orientation="Horizontal"
+                                                                HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                        <!-- استعادة هذه النسخة -->
+                                                        <Button Width="36" Height="32" Padding="0"
+                                                                Command="{Binding DataContext.RestoreCommand,
+                                                                    RelativeSource={RelativeSource AncestorType=materialDesign:Card}}"
+                                                                CommandParameter="{Binding}"
+                                                                Style="{StaticResource MaterialDesignIconButton}"
+                                                                ToolTip="استعادة هذه النسخة">
+                                                            <materialDesign:PackIcon Kind="DatabaseImport" Width="18" Height="18"
+                                                                                     Foreground="#F57C00"/>
+                                                        </Button>
+                                                        <!-- حذف -->
+                                                        <Button Width="36" Height="32" Padding="0" Margin="4,0,0,0"
+                                                                Command="{Binding DataContext.DeleteBackupCommand,
+                                                                    RelativeSource={RelativeSource AncestorType=materialDesign:Card}}"
+                                                                CommandParameter="{Binding}"
+                                                                Style="{StaticResource MaterialDesignIconButton}"
+                                                                ToolTip="حذف هذه النسخة">
+                                                            <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"
+                                                                                     Foreground="#D32F2F"/>
+                                                        </Button>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Border>
+                            </StackPanel>
+                        </materialDesign:Card>
+
+                        <!-- ═══ شريط الحالة + ProgressBar ═══ -->
+                        <Border Margin="0,14,0,0" CornerRadius="8" Padding="14,12"
+                                Visibility="{Binding HasStatus, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="#E8F5E9"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsError}" Value="True">
+                                            <Setter Property="Background" Value="#FFEBEE"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Width="22" Height="22" Margin="0,0,10,0"
+                                                         VerticalAlignment="Center">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="CheckCircle"/>
+                                            <Setter Property="Foreground" Value="#388E3C"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsError}" Value="True">
+                                                    <Setter Property="Kind" Value="AlertCircle"/>
+                                                    <Setter Property="Foreground" Value="#D32F2F"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+                                <TextBlock Text="{Binding StatusMessage}" FontSize="13"
+                                           TextWrapping="Wrap" VerticalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="#388E3C"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsError}" Value="True">
+                                                    <Setter Property="Foreground" Value="#D32F2F"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+
+                        <ProgressBar IsIndeterminate="True" Height="4" Margin="0,8,0,0"
+                                     Style="{StaticResource MaterialDesignLinearProgressBar}"
+                                     Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- 👥 إدارة المستخدمين -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Vertical" Margin="8" HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="AccountGroup" Width="28" Height="28" Margin="0,0,0,8"/>
+                        <TextBlock Text="المستخدمون" FontSize="13" FontWeight="SemiBold"
+                                   TextAlignment="Center" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <Grid Margin="10" DataContext="{Binding Users}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- ======= قائمة المستخدمين ======= -->
+                    <materialDesign:Card Grid.Column="0" Padding="16"
+                                         materialDesign:ElevationAssist.Elevation="Dp3"
+                                         UniformCornerRadius="12">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- عنوان القائمة -->
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,12">
+                                <materialDesign:PackIcon Kind="AccountMultiple" Width="22" Height="22"
+                                                         Foreground="{StaticResource PrimaryBrush}"
+                                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="قائمة المستخدمين" FontSize="16" FontWeight="Bold"
+                                           Foreground="{StaticResource PrimaryBrush}"/>
+                            </StackPanel>
+
+                            <!-- قائمة المستخدمين -->
+                            <ListBox Grid.Row="1"
+                                     ItemsSource="{Binding Users}"
+                                     SelectedItem="{Binding SelectedUser}"
+                                     Background="Transparent" BorderThickness="0"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                                        <Setter Property="Padding" Value="8,6"/>
+                                        <Setter Property="Margin" Value="0,2"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="38"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <!-- أيقونة دائرية بالحرف الأول -->
+                                            <Border Width="32" Height="32" CornerRadius="16"
+                                                    Background="{StaticResource PrimaryBrush}">
+                                                <TextBlock Text="{Binding FullName[0]}" Foreground="White"
+                                                           FontSize="14" FontWeight="Bold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                            <!-- الاسم والدور -->
+                                            <StackPanel Grid.Column="1" Margin="8,0,0,0"
+                                                        VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding FullName}" FontWeight="SemiBold"
+                                                           FontSize="13" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Text="{Binding RoleDisplayName}" FontSize="11"
+                                                           Opacity="0.6"/>
+                                            </StackPanel>
+                                            <!-- مؤشر نشط/غير نشط -->
+                                            <Ellipse Grid.Column="2" Width="8" Height="8"
+                                                     VerticalAlignment="Center" Margin="4,0,0,0">
+                                                <Ellipse.Style>
+                                                    <Style TargetType="Ellipse">
+                                                        <Setter Property="Fill" Value="#4CAF50"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                                <Setter Property="Fill" Value="#9E9E9E"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Ellipse.Style>
+                                            </Ellipse>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <!-- زر مستخدم جديد -->
+                            <Button Grid.Row="2" Command="{Binding NewUserCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Background="{StaticResource PrimaryBrush}"
+                                    Height="40" Margin="0,12,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="AccountPlus" Width="20" Height="20" Margin="0,0,8,0"/>
+                                    <TextBlock Text="مستخدم جديد" FontSize="13" FontWeight="Medium"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </materialDesign:Card>
+
+                    <!-- ======= نموذج التعديل ======= -->
+                    <materialDesign:Card Grid.Column="2" Padding="28"
+                                         materialDesign:ElevationAssist.Elevation="Dp3"
+                                         UniformCornerRadius="12">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel MaxWidth="520">
+
+                                <!-- عنوان النموذج -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <materialDesign:PackIcon Kind="AccountEdit" Width="24" Height="24"
+                                                             Foreground="{StaticResource PrimaryBrush}"
+                                                             VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                    <TextBlock FontSize="18" FontWeight="Bold"
+                                               Foreground="{StaticResource PrimaryBrush}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="مستخدم جديد"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                                        <Setter Property="Text" Value="تعديل المستخدم"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+
+                                <!-- اسم المستخدم -->
+                                <TextBox Text="{Binding FormUsername, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="اسم المستخدم *"
+                                         materialDesign:HintAssist.IsFloating="True"
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                         Margin="0,0,0,16" FontSize="14"/>
+
+                                <!-- الاسم الكامل -->
+                                <TextBox Text="{Binding FormFullName, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="الاسم الكامل *"
+                                         materialDesign:HintAssist.IsFloating="True"
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                         Margin="0,0,0,16" FontSize="14"/>
+
+                                <!-- كلمة المرور -->
+                                <PasswordBox x:Name="SettingsPasswordInput"
+                                             materialDesign:HintAssist.Hint="كلمة المرور (اتركها فارغة للإبقاء)"
+                                             materialDesign:HintAssist.IsFloating="True"
+                                             Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                                             PasswordChanged="SettingsPasswordInput_PasswordChanged"
+                                             Margin="0,0,0,16" FontSize="14"/>
+
+                                <!-- رمز PIN -->
+                                <TextBox Text="{Binding FormPin, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="رمز PIN (4 أرقام - اختياري)"
+                                         materialDesign:HintAssist.IsFloating="True"
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                         Margin="0,0,0,16" FontSize="14"/>
+
+                                <!-- الدور -->
+                                <ComboBox ItemsSource="{Binding Roles}"
+                                          SelectedItem="{Binding FormSelectedRole}"
+                                          DisplayMemberPath="Label"
+                                          materialDesign:HintAssist.Hint="الدور الوظيفي *"
+                                          materialDesign:HintAssist.IsFloating="True"
+                                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                          Margin="0,0,0,16" FontSize="14"/>
+
+                                <!-- نشط/غير نشط -->
+                                <materialDesign:Card Background="#F5F5F5" Padding="16"
+                                                     UniformCornerRadius="8" Margin="0,0,0,20">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                      IsChecked="{Binding FormIsActive}"
+                                                      Width="46" Height="26" Margin="0,0,14,0"/>
+                                        <TextBlock Text="الحساب مفعّل" VerticalAlignment="Center"
+                                                   FontSize="14" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </materialDesign:Card>
+
+                                <!-- أزرار الحفظ والحذف -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                    <Button Command="{Binding SaveCommand}"
+                                            Style="{StaticResource MaterialDesignRaisedButton}"
+                                            Background="{StaticResource SuccessBrush}"
+                                            Height="42" Width="140">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="ContentSave" Width="18" Height="18" Margin="0,0,8,0"/>
+                                            <TextBlock Text="حفظ" FontSize="13" FontWeight="Medium"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Command="{Binding DeleteCommand}"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                                            Foreground="{StaticResource PrimaryBrush}"
+                                            BorderBrush="{StaticResource PrimaryBrush}"
+                                            Height="42" Width="140" Margin="12,0,0,0"
+                                            Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Delete" Width="18" Height="18" Margin="0,0,8,0"/>
+                                            <TextBlock Text="حذف" FontSize="13"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+
+                                <!-- رسالة الحالة -->
+                                <Border CornerRadius="8" Padding="12,10"
+                                        Visibility="{Binding HasStatus, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#E8F5E9"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsError}" Value="True">
+                                                    <Setter Property="Background" Value="#FFEBEE"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Width="20" Height="20" Margin="0,0,8,0"
+                                                                 VerticalAlignment="Center">
+                                            <materialDesign:PackIcon.Style>
+                                                <Style TargetType="materialDesign:PackIcon">
+                                                    <Setter Property="Kind" Value="CheckCircle"/>
+                                                    <Setter Property="Foreground" Value="#388E3C"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsError}" Value="True">
+                                                            <Setter Property="Kind" Value="AlertCircle"/>
+                                                            <Setter Property="Foreground" Value="#D32F2F"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </materialDesign:PackIcon.Style>
+                                        </materialDesign:PackIcon>
+                                        <TextBlock Text="{Binding StatusMessage}" FontSize="13"
+                                                   TextWrapping="Wrap" VerticalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#388E3C"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsError}" Value="True">
+                                                            <Setter Property="Foreground" Value="#D32F2F"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+
+                            </StackPanel>
+                        </ScrollViewer>
+                    </materialDesign:Card>
+
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+        <!-- ✅ Footer Actions -->
+        <materialDesign:Card Grid.Row="2" Padding="24,18" Margin="20,16,20,20"
+                             UniformCornerRadius="12" Effect="{StaticResource CardShadow}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button Command="{Binding SaveCommand}"
+                       CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                       Width="180" Height="48"
+                       Style="{StaticResource MaterialDesignRaisedButton}"
+                       Background="{StaticResource SuccessBrush}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" Width="22" Height="22" Margin="0,0,10,0"/>
+                        <TextBlock Text="حفظ الإعدادات" FontSize="15" FontWeight="Medium"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Click="CancelButton_Click"
+                       Width="130" Height="48" Margin="12,0,0,0"
+                       Style="{StaticResource MaterialDesignOutlinedButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Close" Width="20" Height="20" Margin="0,0,8,0"/>
+                        <TextBlock Text="إغلاق" FontSize="15"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </materialDesign:Card>
+
+    </Grid>
+</Window>

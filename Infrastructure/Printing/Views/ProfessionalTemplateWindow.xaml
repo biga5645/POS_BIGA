@@ -1,0 +1,50 @@
+﻿<Window x:Class="POS_BIGA.Infrastructure.Printing.Views.ProfessionalTemplateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="تخصيص قالب Professional A4/A5"
+        Height="420" Width="560"
+        WindowStartupLocation="CenterOwner"
+        FlowDirection="RightToLeft"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="واجهة قالب Professional A4/A5" FontSize="20" FontWeight="Bold" Margin="0,0,0,12"/>
+
+        <StackPanel Grid.Row="1">
+            <ComboBox x:Name="PaperSizeComboBox"
+                      materialDesign:HintAssist.Hint="حجم الورق "
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Margin="0,0,0,10">
+                <ComboBoxItem Content="A4"/>
+                <ComboBoxItem Content="A5"/>
+            </ComboBox>
+
+            <ComboBox x:Name="DecimalPlacesComboBox"
+                      materialDesign:HintAssist.Hint="الأرقام العشرية"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Margin="0,0,0,10">
+                <ComboBoxItem Content="0"/>
+                <ComboBoxItem Content="1"/>
+                <ComboBoxItem Content="2"/>
+                <ComboBoxItem Content="3"/>
+                <ComboBoxItem Content="4"/>
+            </ComboBox>
+
+            <CheckBox x:Name="ShowLogoCheckBox"    Content="إظهار الشعار"         Margin="0,0,0,8"/>
+            <CheckBox x:Name="ShowCashierCheckBox" Content="إظهار اسم الكاشير"    Margin="0,0,0,8"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Content="حفظ"   Width="120" Margin="0,0,8,0" Click="Save_Click"
+                    Style="{StaticResource MaterialDesignRaisedButton}"/>
+            <Button Content="إلغاء" Width="120" Click="Cancel_Click"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"/>
+        </StackPanel>
+    </Grid>
+</Window>

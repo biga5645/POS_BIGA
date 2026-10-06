@@ -1,0 +1,336 @@
+<Page 
+      x:Class="POS_BIGA.Views.Pages.CustomersPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:vm="clr-namespace:POS_BIGA.ViewModels"
+      xmlns:converters="clr-namespace:POS_BIGA.ViewModels"
+      mc:Ignorable="d"
+      Title="إدارة الزبائن" FlowDirection="RightToLeft"
+      Background="#F5F7FA">
+
+    <Page.Resources>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" Opacity="0.15" Color="#000000"/>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#2C3E50"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#E74C3C"/>
+        <SolidColorBrush x:Key="SuccessBrush" Color="#27AE60"/>
+        <SolidColorBrush x:Key="WarningBrush" Color="#F39C12"/>
+        <SolidColorBrush x:Key="InfoBrush" Color="#3498DB"/>
+        <SolidColorBrush x:Key="PurpleBrush" Color="#9B59B6"/>
+        
+        <converters:IsGreaterThanConverter x:Key="IsGreaterThanConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        
+        <Style x:Key="StatCard" TargetType="materialDesign:Card">
+            <Setter Property="Padding" Value="20,16"/>
+            <Setter Property="UniformCornerRadius" Value="12"/>
+            <Setter Property="Effect" Value="{StaticResource CardShadow}"/>
+            <Setter Property="Margin" Value="8"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <materialDesign:Card Grid.Row="0" Padding="20,16" Margin="0,0,0,16" 
+                             UniformCornerRadius="12" Effect="{StaticResource CardShadow}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Border Background="{StaticResource InfoBrush}" 
+                            CornerRadius="12" Padding="12" Margin="0,0,16,0">
+                        <materialDesign:PackIcon Kind="AccountMultiple" Foreground="White" Width="28" Height="28"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="إدارة الزبائن" FontSize="22" FontWeight="Bold" 
+                                   Foreground="{StaticResource PrimaryBrush}"/>
+                        <TextBlock Text="إضافة وتعديل ومتابعة بيانات العملاء والديون" 
+                                   FontSize="12" Opacity="0.6" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <TextBox Grid.Column="1" 
+                        Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                        materialDesign:HintAssist.Hint="🔍 بحث عن زبون (الاسم، الهاتف، البريد...)"
+                        materialDesign:HintAssist.IsFloating="False"
+                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                        FontSize="13"
+                        Margin="20,0"
+                        Height="44"
+                        VerticalContentAlignment="Center">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Escape" Command="{Binding ClearSearchCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button Command="{Binding AddCommand}"
+                            Width="120" Height="44"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="{StaticResource SuccessBrush}"
+                            ToolTip="إضافة زبون جديد"
+                            Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AccountPlus" Width="18" Height="18" Margin="0,0,6,0"/>
+                            <TextBlock Text="إضافة زبون" FontSize="13" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Command="{Binding RefreshCommand}" 
+                            Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                            ToolTip="تحديث"
+                            Background="{StaticResource InfoBrush}"
+                            Width="44" Height="44">
+                        <materialDesign:PackIcon Kind="Refresh" Width="20" Height="20"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>
+
+        <!-- Statistics -->
+        <UniformGrid Grid.Row="1" Columns="4" Rows="1" Margin="0,0,0,16">
+            <materialDesign:Card Style="{StaticResource StatCard}" Background="{StaticResource InfoBrush}">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="AccountGroup" Width="28" Height="28" 
+                                            Foreground="White" Opacity="0.9" Margin="0,0,0,8"/>
+                    <TextBlock Text="إجمالي الزبائن" FontSize="12" Foreground="White" Opacity="0.85"/>
+                    <TextBlock Text="{Binding TotalCustomersCount}" FontSize="26" FontWeight="Bold" 
+                              Foreground="White" Margin="0,4,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Style="{StaticResource StatCard}" Background="{StaticResource PurpleBrush}">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="FilterOutline" Width="28" Height="28" 
+                                            Foreground="White" Opacity="0.9" Margin="0,0,0,8"/>
+                    <TextBlock Text="المعروضون" FontSize="12" Foreground="White" Opacity="0.85"/>
+                    <TextBlock Text="{Binding Customers.Count}" FontSize="26" FontWeight="Bold" 
+                              Foreground="White" Margin="0,4,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Style="{StaticResource StatCard}" Background="{StaticResource AccentBrush}">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="CashMultiple" Width="28" Height="28" 
+                                            Foreground="White" Opacity="0.9" Margin="0,0,0,8"/>
+                    <TextBlock Text="الرصيد المحدد" FontSize="12" Foreground="White" Opacity="0.85"/>
+                    <TextBlock FontSize="20" FontWeight="Bold" Foreground="White" Margin="0,4,0,0">
+                        <Run Text="{Binding SelectedCustomerBalance, StringFormat={}{0:N2}}"/>
+                        <Run Text=" د.م" FontSize="14"/>
+                    </TextBlock>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Style="{StaticResource StatCard}" Background="{StaticResource SuccessBrush}">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="CreditCardCheck" Width="28" Height="28" 
+                                            Foreground="White" Opacity="0.9" Margin="0,0,0,8"/>
+                    <TextBlock Text="سقف الكريدي" FontSize="12" Foreground="White" Opacity="0.85"/>
+                    <TextBlock FontSize="20" FontWeight="Bold" Foreground="White" Margin="0,4,0,0">
+                        <Run Text="{Binding SelectedCustomer.CreditLimit, StringFormat={}{0:N2}}"/>
+                        <Run Text=" د.م" FontSize="14"/>
+                    </TextBlock>
+                </StackPanel>
+            </materialDesign:Card>
+        </UniformGrid>
+
+        <!-- DataGrid -->
+        <materialDesign:Card Grid.Row="2" Padding="0" UniformCornerRadius="12" Effect="{StaticResource CardShadow}">
+            <Grid>
+                <ProgressBar IsIndeterminate="True" Height="3" VerticalAlignment="Top"
+                            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                <DataGrid x:Name="CustomersGrid" 
+                         ItemsSource="{Binding Customers}" 
+                         SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}" 
+                         AutoGenerateColumns="False" 
+                         CanUserAddRows="False"
+                         IsReadOnly="False"
+                         SelectionMode="Single"
+                         HeadersVisibility="All"
+                         GridLinesVisibility="Horizontal"
+                         AlternatingRowBackground="#F8F9FA"
+                         RowHeight="54"
+                         FontSize="13"
+                         VirtualizingPanel.IsVirtualizing="True"
+                         materialDesign:DataGridAssist.CellPadding="10"
+                         MouseDoubleClick="CustomersGrid_MouseDoubleClick">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="عرض التفاصيل الكاملة" Click="ViewDetails_Click">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="InformationOutline" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="تعديل البيانات" Command="{Binding EditCustomerCommand}" 
+                                     CommandParameter="{Binding SelectedCustomer}">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="Pencil" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Header="حذف" Command="{Binding DeleteCommand}" 
+                                     CommandParameter="{Binding SelectedCustomer}">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="Delete" Foreground="Red" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                            <Setter Property="FontSize" Value="13"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Height" Value="44"/>
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="المعرف" Binding="{Binding Id}" IsReadOnly="True" Width="70">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="{StaticResource InfoBrush}"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="الاسم الكامل" Binding="{Binding FullName}" 
+                                           IsReadOnly="True" Width="*" MinWidth="140">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="FontSize" Value="13"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="الهاتف" Binding="{Binding Phone}" 
+                                           IsReadOnly="True" Width="130">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontFamily" Value="Segoe UI"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="البريد" Binding="{Binding Email}" 
+                                           IsReadOnly="True" Width="180">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Opacity" Value="0.8"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="سقف الدين" 
+                                           Binding="{Binding CreditLimit, StringFormat={}{0:N2}}" 
+                                           IsReadOnly="True" Width="110">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTemplateColumn Header="الديون" Width="110">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="8" Padding="8,4" HorizontalAlignment="Center">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#E8F5E9"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CurrentDebt, Converter={StaticResource IsGreaterThanConverter}, ConverterParameter=0}" Value="True">
+                                                        <Setter Property="Background" Value="#FFEBEE"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock FontWeight="Bold" FontSize="12">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding CurrentDebt, Converter={StaticResource IsGreaterThanConverter}, ConverterParameter=0}" Value="True">
+                                                            <Setter Property="Foreground" Value="{StaticResource AccentBrush}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <Run Text="{Binding CurrentDebt, StringFormat={}{0:N2}}"/>
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="التسجيل" 
+                                           Binding="{Binding CreatedAt, StringFormat={}{0:yyyy-MM-dd}}" 
+                                           IsReadOnly="True" Width="110">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Opacity" Value="0.7"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="FontSize" Value="12"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTemplateColumn Header="الإجراءات" Width="150" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Command="{Binding DataContext.EditCustomerCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                               CommandParameter="{Binding}"
+                                               Style="{StaticResource MaterialDesignIconButton}"
+                                               ToolTip="تعديل"
+                                               Width="32" Height="32">
+                                            <materialDesign:PackIcon Kind="Pencil" Width="16" Height="16" 
+                                                                    Foreground="{StaticResource InfoBrush}"/>
+                                        </Button>
+
+                                        <Button Command="{Binding DataContext.ViewCreditsCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                               CommandParameter="{Binding}"
+                                               Style="{StaticResource MaterialDesignIconButton}"
+                                               ToolTip="الديون"
+                                               Width="32" Height="32" Margin="4,0,0,0">
+                                            <materialDesign:PackIcon Kind="CashMultiple" Width="16" Height="16" 
+                                                                    Foreground="{StaticResource WarningBrush}"/>
+                                        </Button>
+
+                                        <Button Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                               CommandParameter="{Binding}"
+                                               Style="{StaticResource MaterialDesignIconButton}"
+                                               ToolTip="حذف"
+                                               Width="32" Height="32" Margin="4,0,0,0">
+                                            <materialDesign:PackIcon Kind="Delete" Width="16" Height="16" 
+                                                                    Foreground="{StaticResource AccentBrush}"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</Page>
+
+

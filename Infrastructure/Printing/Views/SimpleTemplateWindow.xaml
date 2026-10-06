@@ -1,0 +1,64 @@
+<Window x:Class="POS_BIGA.Infrastructure.Printing.Views.SimpleTemplateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="تخصيص قالب SimpleTemplate"
+        Height="520" Width="560"
+        WindowStartupLocation="CenterOwner"
+        FlowDirection="RightToLeft"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="واجهة قالب SimpleTemplate" FontSize="20" FontWeight="Bold" Margin="0,0,0,12"/>
+
+        <StackPanel Grid.Row="1">
+            <ComboBox x:Name="WidthComboBox"
+                      materialDesign:HintAssist.Hint="عرض الورق الحراري"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Margin="0,0,0,10">
+                <ComboBoxItem Content="58"/>
+                <ComboBoxItem Content="80"/>
+            </ComboBox>
+
+            <ComboBox x:Name="FontSizeComboBox"
+                      materialDesign:HintAssist.Hint="حجم الخط"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Margin="0,0,0,10">
+                <ComboBoxItem Content="10"/>
+                <ComboBoxItem Content="12"/>
+                <ComboBoxItem Content="14"/>
+            </ComboBox>
+
+            <TextBlock Text="كثافة الطباعة" Margin="0,0,0,4"/>
+            <Slider x:Name="DensitySlider" Minimum="1" Maximum="3" TickFrequency="1" IsSnapToTickEnabled="True" Margin="0,0,0,10"/>
+
+            <ComboBox x:Name="DecimalPlacesComboBox"
+                      materialDesign:HintAssist.Hint="الأرقام العشرية"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Margin="0,0,0,10">
+                <ComboBoxItem Content="0"/>
+                <ComboBoxItem Content="1"/>
+                <ComboBoxItem Content="2"/>
+                <ComboBoxItem Content="3"/>
+                <ComboBoxItem Content="4"/>
+            </ComboBox>
+
+            <CheckBox x:Name="ShowHeaderCheckBox" Content="إظهار الترويسة"              Margin="0,0,0,6"/>
+            <CheckBox x:Name="ShowLinesCheckBox"  Content="إظهار الخطوط"                Margin="0,0,0,6"/>
+            <CheckBox x:Name="ShowTotalsCheckBox" Content="إظهار الإجماليات"            Margin="0,0,0,6"/>
+            <CheckBox x:Name="CutAfterPrintCheckBox" Content="قص الورق بعد الطباعة"    Margin="0,0,0,6"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Content=" حفظ"   Width="120" Margin="0,0,8,0" Click="Save_Click"
+                    Style="{StaticResource MaterialDesignRaisedButton}"/>
+            <Button Content="إلغاء " Width="120" Click="Cancel_Click"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,34 @@
+﻿<Window x:Class="POS_BIGA.Infrastructure.Printing.Views.SimpleTemplatePreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="معاينة قالب SimpleTemplate"
+        WindowStartupLocation="CenterOwner"
+        Height="760" Width="760"
+        FlowDirection="RightToLeft"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <materialDesign:PackIcon Kind="Receipt" Width="22" Height="22" Margin="0,0,8,0"/>
+            <TextBlock Text="معاينة قالب  SimpleTemplate" FontSize="18" FontWeight="Bold"/>
+        </StackPanel>
+
+        <FlowDocumentScrollViewer x:Name="PreviewViewer"
+                                  Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto"
+                                  IsToolBarVisible="False"/>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+            <Button Content="طباعة" Width="120" Margin="0,0,8,0" Click="Print_Click"
+                    Style="{StaticResource MaterialDesignRaisedButton}"/>
+            <Button Content="إغلاق" Width="120" Click="Close_Click"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"/>
+        </StackPanel>
+    </Grid>
+</Window>

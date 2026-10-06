@@ -1,0 +1,911 @@
+<Window x:Class="POS_BIGA.Views.Windows.TemplateCustomizationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="تخصيص القالب  - Template Customization" 
+        WindowState="Maximized"
+        MinHeight="650" MinWidth="800"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        FontFamily="Segoe UI"
+        ResizeMode="CanResize">
+
+    <Window.Resources>
+        <!-- Effects & Brushes -->
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="10" ShadowDepth="2" Opacity="0.2" Color="#000000"/>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#6366F1"/>
+        <SolidColorBrush x:Key="SuccessBrush" Color="#10B981"/>
+        <SolidColorBrush x:Key="WarningBrush" Color="#F59E0B"/>
+        <SolidColorBrush x:Key="DangerBrush" Color="#EF4444"/>
+        <SolidColorBrush x:Key="InfoBrush" Color="#3B82F6"/>
+
+        <!-- Animations -->
+        <Storyboard x:Key="FadeIn">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                           From="0" To="1" Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                           From="20" To="0" Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <!-- Button Hover Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.9"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                           To="1.02" Duration="0:0:0.1"/>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                           To="1.02" Duration="0:0:0.1"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                           To="1" Duration="0:0:0.1"/>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                           To="1" Duration="0:0:0.1"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 🎯 Header -->
+        <Border Grid.Row="0" 
+                Padding="20,16" 
+                Margin="0" 
+                CornerRadius="0" 
+                Background="{StaticResource PrimaryBrush}">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.2" Color="#000000"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <materialDesign:PackIcon Grid.Column="0" Kind="PaletteOutline" 
+                                        Foreground="White" Width="32" Height="32" 
+                                        VerticalAlignment="Center" Margin="0,0,12,0"/>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="تخصيص قالب الفاتورة" 
+                              FontSize="20" FontWeight="Bold" 
+                              Foreground="White"/>
+                    <TextBlock Text="اختر الإعدادات المناسبة لطباعة فواتيرك"
+                              FontSize="12" 
+                              Foreground="#E0E7FF" 
+                              Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <Button Grid.Column="2" 
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="CloseButton_Click"
+                        Foreground="White"
+                        Width="32" Height="32"
+                        Cursor="Hand"
+                        ToolTip="إغلاق">
+                    <materialDesign:PackIcon Kind="Close" Width="24" Height="24"/>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- 📋 Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20">
+            <StackPanel MaxWidth="800">
+
+                <!-- 🎯 Quick Presets -->
+                <Border Background="#F8FAFC" 
+                        Padding="20" 
+                        Margin="0,0,0,16" 
+                        CornerRadius="12"
+                        BorderBrush="#E2E8F0"
+                        BorderThickness="1">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <materialDesign:PackIcon Kind="FlashAuto" 
+                                                    Foreground="{StaticResource WarningBrush}"
+                                                    Width="20" Height="20"
+                                                    VerticalAlignment="Center"
+                                                    Margin="0,0,8,0"/>
+                            <TextBlock Text="إعدادات سريعة" 
+                                      FontSize="16" 
+                                      FontWeight="Bold"
+                                      Foreground="#334155"/>
+                            <TextBlock Text=" - اختر واحدة من الإعدادات الجاهزة"
+                                      FontSize="13"
+                                      Foreground="#64748B"
+                                      VerticalAlignment="Center"
+                                      Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Preset 1: متجر صغير -->
+                            <Button Grid.Column="0"
+                                    x:Name="PresetSmallShop"
+                                    Click="ApplyPreset_SmallShop"
+                                    Style="{StaticResource ModernButton}"
+                                    Background="White"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="2"
+                                    Padding="12,10">
+                                <StackPanel>
+                                    <materialDesign:PackIcon Kind="Store" 
+                                                            Width="24" Height="24"
+                                                            Foreground="#8B5CF6"
+                                                            HorizontalAlignment="Center"
+                                                            Margin="0,0,0,8"/>
+                                    <TextBlock Text="متجر صغير"
+                                              FontSize="13"
+                                              FontWeight="Bold"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock Text="58mm حراري"
+                                              FontSize="11"
+                                              Foreground="#64748B"
+                                              HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Preset 2: محل عادي -->
+                            <Button Grid.Column="2"
+                                    x:Name="PresetMediumShop"
+                                    Click="ApplyPreset_MediumShop"
+                                    Style="{StaticResource ModernButton}"
+                                    Background="White"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="2"
+                                    Padding="12,10">
+                                <StackPanel>
+                                    <materialDesign:PackIcon Kind="Shopping" 
+                                                            Width="24" Height="24"
+                                                            Foreground="#10B981"
+                                                            HorizontalAlignment="Center"
+                                                            Margin="0,0,0,8"/>
+                                    <TextBlock Text="محل عادي"
+                                              FontSize="13"
+                                              FontWeight="Bold"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock Text="80mm حراري"
+                                              FontSize="11"
+                                              Foreground="#64748B"
+                                              HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Preset 3: مؤسسة -->
+                            <Button Grid.Column="4"
+                                    x:Name="PresetCompany"
+                                    Click="ApplyPreset_Company"
+                                    Style="{StaticResource ModernButton}"
+                                    Background="White"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="2"
+                                    Padding="12,10">
+                                <StackPanel>
+                                    <materialDesign:PackIcon Kind="Domain" 
+                                                            Width="24" Height="24"
+                                                            Foreground="#3B82F6"
+                                                            HorizontalAlignment="Center"
+                                                            Margin="0,0,0,8"/>
+                                    <TextBlock Text="مؤسسة"
+                                              FontSize="13"
+                                              FontWeight="Bold"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock Text="A4 احترافي"
+                                              FontSize="11"
+                                              Foreground="#64748B"
+                                              HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 🎨 نوع القالب -->
+                <Border x:Name="TemplateTypePanel"
+                        Background="White" 
+                        Padding="24" 
+                        Margin="0,0,0,16" 
+                        CornerRadius="12"
+                        BorderBrush="#E5E7EB"
+                        BorderThickness="1">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.1" Color="#000000"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="ViewModule" 
+                                                    Foreground="{StaticResource PrimaryBrush}"
+                                                    Width="24" Height="24"
+                                                    VerticalAlignment="Center"
+                                                    Margin="0,0,10,0"/>
+                            <TextBlock Text="نوع القالب"
+                                      FontSize="18" 
+                                      FontWeight="Bold"
+                                      Foreground="{StaticResource PrimaryBrush}"/>
+                        </StackPanel>
+
+                        <TextBlock Text="اختر نوع الطابعة والقالب المناسب"
+                                  FontSize="13"
+                                  Foreground="#64748B"
+                                  Margin="0,0,0,16"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Professional Template -->
+                            <Border Grid.Column="0" 
+                                   x:Name="ProfessionalBorder"
+                                   BorderBrush="{StaticResource PrimaryBrush}"
+                                   BorderThickness="2"
+                                   CornerRadius="10"
+                                   Padding="20"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="Professional_Click">
+                                <StackPanel>
+                                    <materialDesign:PackIcon Kind="FileStar" 
+                                                            Width="48" Height="48"
+                                                            Foreground="{StaticResource PrimaryBrush}"
+                                                            HorizontalAlignment="Center"
+                                                            Margin="0,0,0,12"/>
+                                    <TextBlock Text="Professional" 
+                                              FontSize="20" 
+                                              FontWeight="Bold"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,8"/>
+                                    <TextBlock Text="A4 / A5" 
+                                              FontSize="14"
+                                              Foreground="#64748B"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock Text="طابعات الليزر والحبر" 
+                                              FontSize="12"
+                                              Foreground="#94A3B8"
+                                              HorizontalAlignment="Center"
+                                              TextWrapping="Wrap"
+                                              TextAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Simple Template -->
+                            <Border Grid.Column="2" 
+                                   x:Name="SimpleBorder"
+                                   BorderBrush="#CBD5E1"
+                                   BorderThickness="2"
+                                   CornerRadius="10"
+                                   Padding="20"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="Simple_Click">
+                                <StackPanel>
+                                    <materialDesign:PackIcon Kind="Receipt" 
+                                                            Width="48" Height="48"
+                                                            Foreground="#64748B"
+                                                            HorizontalAlignment="Center"
+                                                            Margin="0,0,0,12"/>
+                                    <TextBlock Text="Simple" 
+                                              FontSize="20" 
+                                              FontWeight="Bold"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,8"/>
+                                    <TextBlock Text="58mm / 80mm" 
+                                              FontSize="14"
+                                              Foreground="#64748B"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock Text="الطابعات الحرارية" 
+                                              FontSize="12"
+                                              Foreground="#94A3B8"
+                                              HorizontalAlignment="Center"
+                                              TextWrapping="Wrap"
+                                              TextAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 📄 حجم الورقة -->
+                <Border x:Name="PaperSizePanel"
+                        Background="White" 
+                        Padding="24" 
+                        Margin="0,0,0,16" 
+                        CornerRadius="12"
+                        BorderBrush="#E5E7EB"
+                        BorderThickness="1">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.1" Color="#000000"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="FileDocument" 
+                                                    Foreground="{StaticResource PrimaryBrush}"
+                                                    Width="24" Height="24"
+                                                    VerticalAlignment="Center"
+                                                    Margin="0,0,10,0"/>
+                            <TextBlock Text="حجم الورقة"
+                                      FontSize="18" 
+                                      FontWeight="Bold"
+                                      Foreground="{StaticResource PrimaryBrush}"/>
+                        </StackPanel>
+
+                        <TextBlock Text="اختر حجم الورقة المستخدم للطباعة"
+                                  FontSize="13"
+                                  Foreground="#64748B"
+                                  Margin="0,0,0,16"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- A4 Option -->
+                            <Border Grid.Column="0" 
+                                   x:Name="A4Border"
+                                   BorderBrush="{StaticResource PrimaryBrush}"
+                                   BorderThickness="2"
+                                   CornerRadius="10"
+                                   Padding="20"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="A4_Click">
+                                <StackPanel>
+                                    <materialDesign:PackIcon Kind="FilePdfBox" 
+                                                            Width="48" Height="48"
+                                                            Foreground="{StaticResource PrimaryBrush}"
+                                                            HorizontalAlignment="Center"
+                                                            Margin="0,0,0,12"/>
+                                    <TextBlock Text="A4" 
+                                              FontSize="24" 
+                                              FontWeight="Bold"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,8"/>
+                                    <TextBlock Text="210 × 297 مم" 
+                                              FontSize="14"
+                                              Foreground="#64748B"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock Text="للطابعات العادية" 
+                                              FontSize="12"
+                                              Foreground="#94A3B8"
+                                              HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- A5 Option -->
+                            <Border Grid.Column="2" 
+                                   x:Name="A5Border"
+                                   BorderBrush="#CBD5E1"
+                                   BorderThickness="2"
+                                   CornerRadius="10"
+                                   Padding="20"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="A5_Click">
+                                <StackPanel>
+                                    <materialDesign:PackIcon Kind="FilePdfBox" 
+                                                            Width="48" Height="48"
+                                                            Foreground="#64748B"
+                                                            HorizontalAlignment="Center"
+                                                            Margin="0,0,0,12"/>
+                                    <TextBlock Text="A5" 
+                                              FontSize="24" 
+                                              FontWeight="Bold"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,8"/>
+                                    <TextBlock Text="148 × 210 مم" 
+                                              FontSize="14"
+                                              Foreground="#64748B"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock Text="للفواتير المدمجة" 
+                                              FontSize="12"
+                                              Foreground="#94A3B8"
+                                              HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 🔢 الأرقام العشرية -->
+                <Border Background="White" 
+                        Padding="24" 
+                        Margin="0,0,0,16" 
+                        CornerRadius="12"
+                        BorderBrush="#E5E7EB"
+                        BorderThickness="1">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.1" Color="#000000"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="DecimalIncrease" 
+                                                    Foreground="{StaticResource SuccessBrush}"
+                                                    Width="24" Height="24"
+                                                    VerticalAlignment="Center"
+                                                    Margin="0,0,10,0"/>
+                            <TextBlock Text="الأرقام العشرية" 
+                                      FontSize="18" 
+                                      FontWeight="Bold"
+                                      Foreground="{StaticResource PrimaryBrush}"/>
+                        </StackPanel>
+
+                        <TextBlock Text="عدد الأرقام العشرية في الأسعار والكميات"
+                                  FontSize="13"
+                                  Foreground="#64748B"
+                                  Margin="0,0,0,12"/>
+
+                        <ComboBox x:Name="DecimalPlacesComboBox"
+                                 SelectedIndex="2"
+                                 FontSize="15"
+                                 Margin="0,0,0,8"
+                                 Padding="8">
+                            <ComboBoxItem Content="0 - بدون أرقام عشرية (مثال: 100)"/>
+                            <ComboBoxItem Content="1 - رقم واحد (مثال: 100.5)"/>
+                            <ComboBoxItem Content="2 - رقمان (مثال: 100.50)"/>
+                            <ComboBoxItem Content="3 - ثلاثة أرقام (مثال: 100.500)"/>
+                        </ComboBox>
+                    </StackPanel>
+                </Border>
+
+                <!-- 🖨️ إعدادات الطابعة الحرارية (Simple) -->
+                <Border x:Name="ThermalSettingsPanel"
+                        Background="White" 
+                        Padding="24" 
+                        Margin="0,0,0,16" 
+                        CornerRadius="12"
+                        BorderBrush="#E5E7EB"
+                        BorderThickness="1"
+                        Visibility="Collapsed">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.1" Color="#000000"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="Printer" 
+                                                    Foreground="{StaticResource WarningBrush}"
+                                                    Width="24" Height="24"
+                                                    VerticalAlignment="Center"
+                                                    Margin="0,0,10,0"/>
+                            <TextBlock Text="إعدادات الطابعة الحرارية" 
+                                      FontSize="18" 
+                                      FontWeight="Bold"
+                                      Foreground="{StaticResource PrimaryBrush}"/>
+                        </StackPanel>
+
+                        <TextBlock Text="تخصيص إعدادات قالب Simple للطابعات الحرارية"
+                                  FontSize="13"
+                                  Foreground="#64748B"
+                                  Margin="0,0,0,16"/>
+
+                        <!-- عرض الورق -->
+                        <TextBlock Text="عرض الورق الحراري"
+                                  FontSize="14"
+                                  FontWeight="SemiBold"
+                                  Margin="0,0,0,8"/>
+
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- 58mm -->
+                            <Border Grid.Column="0"
+                                   x:Name="Width58Border"
+                                   BorderBrush="#CBD5E1"
+                                   BorderThickness="2"
+                                   CornerRadius="8"
+                                   Padding="16"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="Width58_Click">
+                                <StackPanel>
+                                    <TextBlock Text="58 مم" 
+                                              FontSize="18"
+                                              FontWeight="Bold"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock Text="للطابعات الصغيرة" 
+                                              FontSize="11"
+                                              Foreground="#64748B"
+                                              HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 80mm -->
+                            <Border Grid.Column="2"
+                                   x:Name="Width80Border"
+                                   BorderBrush="{StaticResource PrimaryBrush}"
+                                   BorderThickness="2"
+                                   CornerRadius="8"
+                                   Padding="16"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="Width80_Click">
+                                <StackPanel>
+                                    <TextBlock Text="80 مم" 
+                                              FontSize="18"
+                                              FontWeight="Bold"
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,4"/>
+                                    <TextBlock Text="الأكثر شيوعاً" 
+                                              FontSize="11"
+                                              Foreground="#64748B"
+                                              HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- حجم الخط -->
+                        <TextBlock Text="حجم الخط"
+                                  FontSize="14"
+                                  FontWeight="SemiBold"
+                                  Margin="0,0,0,8"/>
+
+                        <ComboBox x:Name="FontSizeComboBox"
+                                 SelectedIndex="1"
+                                 FontSize="14"
+                                 Margin="0,0,0,16"
+                                 Padding="8">
+                            <ComboBoxItem Content="صغير (10pt) - لمزيد من المنتجات"/>
+                            <ComboBoxItem Content="عادي (12pt) - الافتراضي"/>
+                            <ComboBoxItem Content="كبير (14pt) - للقراءة الأسهل"/>
+                        </ComboBox>
+
+                        <!-- كثافة الطباعة -->
+                        <TextBlock Text="كثافة الطباعة"
+                                  FontSize="14"
+                                  FontWeight="SemiBold"
+                                  Margin="0,0,0,8"/>
+
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="خفيف" FontSize="12" Foreground="#94A3B8"/>
+                            <Slider Grid.Column="1" 
+                                   x:Name="DensitySlider"
+                                   Minimum="1" 
+                                   Maximum="3" 
+                                   Value="2" 
+                                   TickFrequency="1" 
+                                   IsSnapToTickEnabled="True"
+                                   Margin="12,0"/>
+                            <TextBlock Grid.Column="2" Text="داكن" FontSize="12" Foreground="#94A3B8"/>
+                        </Grid>
+
+                        <!-- خيارات العرض -->
+                        <TextBlock Text="خيارات العرض"
+                                  FontSize="14"
+                                  FontWeight="SemiBold"
+                                  Margin="0,0,0,8"/>
+
+                        <CheckBox x:Name="ShowThermalHeaderCheckBox"
+                                 Content="إظهار رأس الفاتورة (اسم المتجر)"
+                                 IsChecked="True"
+                                 Margin="0,0,0,8"
+                                 FontSize="13"/>
+
+                        <CheckBox x:Name="ShowThermalLinesCheckBox"
+                                 Content="إظهار خطوط الفاصل"
+                                 IsChecked="True"
+                                 Margin="0,0,0,8"
+                                 FontSize="13"/>
+
+                        <CheckBox x:Name="ShowThermalTotalsCheckBox"
+                                 Content="إظهار تفاصيل المجاميع"
+                                 IsChecked="True"
+                                 Margin="0,0,0,8"
+                                 FontSize="13"/>
+
+                        <CheckBox x:Name="CutAfterPrintCheckBox"
+                                 Content="قص الورق تلقائياً بعد الطباعة"
+                                 IsChecked="True"
+                                 FontSize="13"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 🎨 تخصيصات إضافية -->
+                <Border Background="White" 
+                        Padding="24" 
+                        Margin="0,0,0,16" 
+                        CornerRadius="12"
+                        BorderBrush="#E5E7EB"
+                        BorderThickness="1">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.1" Color="#000000"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="Cog" 
+                                                    Foreground="{StaticResource WarningBrush}"
+                                                    Width="24" Height="24"
+                                                    VerticalAlignment="Center"
+                                                    Margin="0,0,10,0"/>
+                            <TextBlock Text="خيارات إضافية" 
+                                      FontSize="18" 
+                                      FontWeight="Bold"
+                                      Foreground="{StaticResource PrimaryBrush}"/>
+                        </StackPanel>
+
+                        <!-- إظهار الشعار -->
+                        <CheckBox x:Name="ShowLogoCheckBox"
+                                 Content="إظهار شعار المتجر في الفاتورة"
+                                 IsChecked="False"
+                                 Margin="0,0,0,12"
+                                 FontSize="14"
+                                 ToolTip="قريباً - سيتم إضافة دعم الشعارات"/>
+
+                        <!-- إظهار الباركود -->
+                        <CheckBox x:Name="ShowBarcodeCheckBox"
+                                 Content="إظهار QR Code/Barcode أسفل الفاتورة"
+                                 IsChecked="False"
+                                 Margin="0,0,0,12"
+                                 FontSize="14"
+                                 ToolTip="قريباً - سيتم إضافة دعم QR Codes"/>
+
+                        <!-- طباعة الألوان -->
+                        <CheckBox x:Name="ColorPrintCheckBox"
+                                 Content="طباعة ملونة (للطابعات الملونة فقط)"
+                                 IsChecked="True"
+                                 Margin="0,0,0,12"
+                                 FontSize="14"/>
+
+                        <!-- إظهار تفاصيل الكاشير -->
+                        <CheckBox x:Name="ShowCashierCheckBox"
+                                 Content="إظهار اسم الكاشير ونقطة البيع"
+                                 IsChecked="True"
+                                 FontSize="14"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- ℹ️ معلومات -->
+                <Border Background="#EFF6FF" 
+                       BorderBrush="#3B82F6" 
+                       BorderThickness="2" 
+                       CornerRadius="10" 
+                       Padding="20">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="InformationOutline" 
+                                                Foreground="#3B82F6" 
+                                                Width="24" Height="24" 
+                                                VerticalAlignment="Top" 
+                                                Margin="0,0,12,0"/>
+                        <StackPanel>
+                            <TextBlock Text="💡 نصائح التخصيص" 
+                                      FontSize="16" 
+                                      FontWeight="Bold" 
+                                      Foreground="#1E40AF" 
+                                      Margin="0,0,0,8"/>
+                            <TextBlock TextWrapping="Wrap" FontSize="13" Foreground="#1E3A8A" LineHeight="22">
+                                <Run Text="• اختر" FontWeight="SemiBold"/>
+                                <Run Text=" A4 للطابعات المكتبية العادية"/>
+                                <LineBreak/>
+                                <Run Text="• اختر" FontWeight="SemiBold"/>
+                                <Run Text=" A5 لطباعة فواتير أصغر حجماً وأكثر كفاءة"/>
+                                <LineBreak/>
+                                <Run Text="• استخدم" FontWeight="SemiBold"/>
+                                <Run Text=" 2 أرقام عشرية للعملات العادية"/>
+                                <LineBreak/>
+                                <Run Text="• اضغط" FontWeight="SemiBold"/>
+                                <Run Text=" 'معاينة' لرؤية التغييرات قبل الحفظ"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- 🎛️ Action Bar -->
+        <Border Grid.Row="2" 
+                Background="White"
+                Padding="20" 
+                Margin="0" 
+                CornerRadius="0"
+                BorderBrush="#E5E7EB"
+                BorderThickness="0,1,0,0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.2" Color="#000000"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- معلومات حية -->
+                <StackPanel Grid.Column="0" 
+                           Orientation="Horizontal" 
+                           VerticalAlignment="Center">
+                    <!-- Progress Indicator -->
+                    <Border x:Name="ProgressIndicator"
+                            Width="20" Height="20"
+                            Margin="0,0,8,0"
+                            Visibility="Collapsed">
+                        <Border.RenderTransform>
+                            <RotateTransform x:Name="ProgressRotation" CenterX="10" CenterY="10"/>
+                        </Border.RenderTransform>
+                        <Border.Triggers>
+                            <EventTrigger RoutedEvent="Border.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <DoubleAnimation Storyboard.TargetName="ProgressRotation"
+                                                       Storyboard.TargetProperty="Angle"
+                                                       From="0" To="360" Duration="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Border.Triggers>
+                        <materialDesign:PackIcon Kind="Loading" 
+                                                Foreground="{StaticResource PrimaryBrush}"/>
+                    </Border>
+
+                    <!-- Status Icon -->
+                    <materialDesign:PackIcon x:Name="StatusIcon"
+                                            Kind="InformationOutline" 
+                                            Foreground="#6366F1" 
+                                            Margin="0,0,8,0"/>
+
+                    <TextBlock x:Name="StatusText" 
+                              Text="جاهز للحفظ"
+                              Foreground="#64748B"
+                              VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- الأزرار -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <!-- إعادة تعيين -->
+                    <Button x:Name="ResetButton"
+                            Style="{StaticResource ModernButton}"
+                            Background="#F3F4F6"
+                            Foreground="#6B7280"
+                            Click="ResetButton_Click"
+                            Padding="16,8"
+                            Margin="0,0,12,0"
+                            ToolTip="إعادة تعيين إلى الافتراضي">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,6,0"/>
+                            <TextBlock Text="إعادة تعيين" 
+                                      VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- معاينة -->
+                    <Button x:Name="PreviewButton"
+                            Style="{StaticResource ModernButton}"
+                            Background="White"
+                            BorderBrush="{StaticResource PrimaryBrush}"
+                            BorderThickness="2"
+                            Foreground="{StaticResource PrimaryBrush}"
+                            Click="PreviewButton_Click"
+                            Padding="16,8"
+                            Margin="0,0,12,0"
+                            ToolTip="معاينة مع الإعدادات الحالية">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="EyeOutline" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,6,0"/>
+                            <TextBlock Text="معاينة" 
+                                      VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- حفظ -->
+                    <Button x:Name="SaveButton"
+                            Style="{StaticResource ModernButton}"
+                            Background="{StaticResource SuccessBrush}"
+                            Foreground="White"
+                            Click="SaveButton_Click"
+                            Padding="20,8"
+                            Margin="0,0,12,0">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,6,0"/>
+                            <TextBlock Text="حفظ الإعدادات" 
+                                      VerticalAlignment="Center" 
+                                      FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- إلغاء -->
+                    <Button x:Name="CancelButton"
+                            Style="{StaticResource ModernButton}"
+                            Background="White"
+                            BorderBrush="#CBD5E1"
+                            BorderThickness="2"
+                            Foreground="#64748B"
+                            Click="CloseButton_Click"
+                            Padding="16,8">
+                        <TextBlock Text="إلغاء"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

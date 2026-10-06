@@ -1,0 +1,896 @@
+<Window x:Class="POS_BIGA.Views.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:POS_BIGA.Views.Controls"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:POS_BIGA.ViewModels"
+        xmlns:conv="clr-namespace:POS_BIGA.Converters"
+        xmlns:selectors="clr-namespace:POS_BIGA.Views.Selectors"
+        xmlns:models="clr-namespace:POS_BIGA.Models"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework"
+        Title="BIGA POS - نظام البيع المت advanced" 
+        Height="900" Width="1600" 
+        MinHeight="720" MinWidth="1280"
+        WindowState="Maximized"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft" 
+        FontFamily="Segoe UI"
+        RenderOptions.BitmapScalingMode="HighQuality"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType">
+
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <conv:NegativeToBrushConverter x:Key="NegativeToBrush" NegativeBrush="DarkRed" PositiveBrush="Black" />
+        <selectors:LeftItemTemplateSelector x:Key="LeftItemTemplateSelector" />
+
+        <!-- 🎨 Modern Color Palette -->
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#1976D2" />
+        <SolidColorBrush x:Key="AccentBrush" Color="#0288D1" />
+        <SolidColorBrush x:Key="BackgroundBrush" Color="#ECEFF1" />
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="SuccessBrush" Color="#388E3C" />
+        <SolidColorBrush x:Key="DangerBrush" Color="#D32F2F" />
+
+        <!-- ✅ Animation Resources -->
+        <CubicEase x:Key="EaseOut" EasingMode="EaseOut"/>
+        <QuadraticEase x:Key="EaseInOut" EasingMode="EaseInOut"/>
+
+        <!-- ✨ Modern Touch Buttons -->
+        <Style TargetType="Button" x:Key="TouchButton">
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="16,10" />
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="MinHeight" Value="50" />
+            <Setter Property="MinWidth" Value="100" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.95" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.85" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Key="SecondaryTouchButton" BasedOn="{StaticResource TouchButton}">
+            <Setter Property="Background" Value="#78909C" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+
+        <Style TargetType="TextBox" x:Key="TouchTextBox">
+            <Setter Property="MinHeight" Value="52" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 🎯 Modern Header -->
+        <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" Padding="16,12">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.08" />
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Logo & Title -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="{StaticResource PrimaryBrush}" CornerRadius="8" Padding="10" Margin="0,0,12,0">
+                        <TextBlock Text="🛒" FontSize="24" />
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="BIGA POS" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" />
+                        <TextBlock Text="نظام البيع الاحترافي" FontSize="11" Opacity="0.7" />
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Search Bar -->
+                <Grid Grid.Column="1" MinWidth="300" MaxWidth="500" Margin="20,0" VerticalAlignment="Center">
+                    <Border Background="#F5F5F5" CornerRadius="10" Padding="12,8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <materialDesign:PackIcon Grid.Column="0" Kind="Magnify" Width="20" Height="20" 
+                                                     Foreground="#607D8B" VerticalAlignment="Center" Margin="0,0,8,0" />
+
+                            <TextBox Grid.Column="1" x:Name="SearchTextBox" 
+                                     materialDesign:HintAssist.Hint="ابحث عن منتج..." 
+                                     Height="36" FontSize="14" VerticalContentAlignment="Center"
+                                     Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" 
+                                     Background="Transparent" BorderThickness="0" Padding="0">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
+                                </TextBox.InputBindings>
+                            </TextBox>
+
+                            <Button Grid.Column="2" Width="28" Height="28" Click="ClearSearch_Click"
+                                    Style="{StaticResource MaterialDesignToolForegroundButton}" Padding="0">
+                                <materialDesign:PackIcon Kind="Close" Width="16" Height="16" Foreground="#90A4AE" />
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- Action Buttons -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <!-- Clock and keyboard -->
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,12,0">
+                        <TextBlock x:Name="TimeText" Text="--:--:--" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="#455A64" />
+                        <TextBlock x:Name="DateText" Text="----/--/--" FontSize="11" HorizontalAlignment="Right" Foreground="#607D8B" />
+                    </StackPanel>
+                    <Button Click="OpenOnScreenKeyboard_Click" Style="{StaticResource MaterialDesignIconButton}" Width="44" Height="44" Margin="4" ToolTip="لوحة المفاتيح"> 
+                        <materialDesign:PackIcon Kind="KeyboardOutline" Width="22" Height="22" Foreground="#607D8B" />
+                    </Button>
+
+                    <Button Click="NavigateProducts_Click" Style="{StaticResource MaterialDesignIconButton}" 
+                            Width="44" Height="44" Margin="4" ToolTip="المنتجات">
+                        <materialDesign:PackIcon Kind="ShoppingOutline" Width="24" Height="24" Foreground="{StaticResource PrimaryBrush}" />
+                    </Button>
+
+                    <!-- الزبائن: يظهر فقط إذا كان لديه صلاحية -->
+                    <Button Click="OpenCustomers_Click" Style="{StaticResource MaterialDesignIconButton}" 
+                            Width="44" Height="44" Margin="4" ToolTip="الزبائن"
+                            Visibility="{Binding CanViewCustomers, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <materialDesign:PackIcon Kind="AccountGroup" Width="24" Height="24" Foreground="#2196F3" />
+                    </Button>
+
+                    <!-- المخزون -->
+                    <Button Click="OpenInventory_Click" Style="{StaticResource MaterialDesignIconButton}" 
+                            Width="44" Height="44" Margin="4" ToolTip="المخزون"
+                            Visibility="{Binding CanViewInventory, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <materialDesign:PackIcon Kind="PackageVariant" Width="24" Height="24" Foreground="#FF9800" />
+                    </Button>
+
+                    <!-- التقارير -->
+                    <Button Click="OpenReports_Click" Style="{StaticResource MaterialDesignIconButton}" 
+                            Width="44" Height="44" Margin="4" ToolTip="التقارير"
+                            Visibility="{Binding CanViewReports, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <materialDesign:PackIcon Kind="ChartLine" Width="24" Height="24" Foreground="#4CAF50" />
+                    </Button>
+
+                    <!-- الإعدادات -->
+                    <Button Click="OpenSettings_Click" Style="{StaticResource MaterialDesignIconButton}" 
+                            Width="44" Height="44" Margin="4" ToolTip="الإعدادات"
+                            Visibility="{Binding CanAccessSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <materialDesign:PackIcon Kind="Cog" Width="24" Height="24" Foreground="#607D8B" />
+                    </Button>
+
+                    <Separator Margin="8,0" Width="1" Background="#E0E0E0" />
+                    
+                    <!-- 👤 معلومات المستخدم الحالي -->
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="4,0,8,0">
+                        <TextBlock Text="{Binding CurrentUserName}" FontSize="12" FontWeight="Bold"
+                                   Foreground="#455A64" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding CurrentUserRole}" FontSize="10"
+                                   Foreground="#78909C" HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- 🚪 تسجيل الخروج -->
+                    <Button Command="{Binding LogoutCommand}"
+                            Style="{StaticResource MaterialDesignIconButton}" 
+                            Width="44" Height="44" Margin="4" ToolTip="تسجيل الخروج">
+                        <materialDesign:PackIcon Kind="Logout" Width="22" Height="22" Foreground="#FF7043" />
+                    </Button>
+
+                    <Separator Margin="8,0" Width="1" Background="#E0E0E0" />
+                    
+                    <Button Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignIconButton}" 
+                            Width="44" Height="44" Margin="4" ToolTip="إغلاق">
+                        <materialDesign:PackIcon Kind="Close" Width="24" Height="24" Foreground="{StaticResource DangerBrush}" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 📢 Notification Toast -->
+        <Border Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                Margin="0,70,0,0" 
+                Background="#1E88E5" CornerRadius="8" Padding="20,12"
+                Visibility="{Binding NotificationVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Panel.ZIndex="9999">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.3" />
+            </Border.Effect>
+            <TextBlock Text="{Binding NotificationMessage}" Foreground="White" 
+                      FontWeight="SemiBold" FontSize="14" />
+        </Border>
+
+        <!-- ✅ Loading Indicator -->
+        <Border Grid.Row="1" Background="#FFFFFF" Opacity="0.95" 
+                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}"
+                Panel.ZIndex="1000">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <materialDesign:PackIcon Kind="Loading" Width="64" Height="64" 
+                                        Foreground="{StaticResource PrimaryBrush}" 
+                                        RenderTransformOrigin="0.5,0.5">
+                    <materialDesign:PackIcon.RenderTransform>
+                        <RotateTransform Angle="0"/>
+                    </materialDesign:PackIcon.RenderTransform>
+                    <materialDesign:PackIcon.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                                    From="0" To="360" Duration="0:0:1.2" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </materialDesign:PackIcon.Triggers>
+                </materialDesign:PackIcon>
+                <TextBlock Text="جاري التحميل..." FontSize="16" FontWeight="SemiBold" 
+                          Foreground="{StaticResource PrimaryBrush}" Margin="0,16,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 📦 Main Content Area -->
+        <Grid Grid.Row="1" Margin="12,8,12,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.2*" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="1*" MinWidth="480" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Left: Products/Categories -->
+            <Border Grid.Column="0" Background="{StaticResource SurfaceBrush}" CornerRadius="12"
+                    PreviewMouseDown="ProductsArea_PreviewMouseDown">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.06" />
+                </Border.Effect>
+                <DockPanel>
+                    <!-- Header -->
+                    <Border DockPanel.Dock="Top" Background="#FAFAFA" Padding="16,12" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Back Button & Title -->
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Visibility="{Binding ShowBackVisibility}" 
+                                       Command="{Binding BackToCategoriesCommand}" 
+                                       Style="{StaticResource MaterialDesignOutlinedButton}" 
+                                       Height="36" Padding="12,0" Margin="0,0,12,0"
+                                       BorderBrush="{StaticResource PrimaryBrush}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="ArrowRight" Width="18" Height="18" 
+                                                                Foreground="{StaticResource PrimaryBrush}" Margin="0,0,6,0" />
+                                        <TextBlock Text="رجوع" Foreground="{StaticResource PrimaryBrush}" FontWeight="SemiBold" />
+                                    </StackPanel>
+                                </Button>
+                                
+                                <materialDesign:PackIcon Kind="ViewGrid" Width="24" Height="24" 
+                                                        Foreground="{StaticResource PrimaryBrush}" 
+                                                        VerticalAlignment="Center" Margin="0,0,10,0" />
+                                <TextBlock Text="{Binding CurrentViewTitle}" FontSize="18" FontWeight="Bold" 
+                                          Foreground="#263238" VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <!-- Filters (Centered) -->
+                            <WrapPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Button Command="{Binding ShowByCategoriesCommand}" Margin="0,0,6,0" Padding="10,4">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                            <Setter Property="BorderBrush" Value="#90A4AE"/>
+                                            <Setter Property="Foreground" Value="#546E7A"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsDisplayByCategories}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <TextBlock Text="حسب الفئات" FontSize="12" FontWeight="SemiBold"/>
+                                </Button>
+
+                                <Button Command="{Binding ShowAllProductsModeCommand}" Margin="0,0,6,0" Padding="10,4">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                            <Setter Property="BorderBrush" Value="#90A4AE"/>
+                                            <Setter Property="Foreground" Value="#546E7A"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsDisplayAllProducts}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <TextBlock Text="كل المنتجات" FontSize="12" FontWeight="SemiBold"/>
+                                </Button>
+
+                                <Button Command="{Binding ShowWithoutBarcodeModeCommand}" Margin="0,0,6,0" Padding="10,4">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                            <Setter Property="BorderBrush" Value="#90A4AE"/>
+                                            <Setter Property="Foreground" Value="#546E7A"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsDisplayWithoutBarcode}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <TextBlock Text="بدون باركود" FontSize="12" FontWeight="SemiBold"/>
+                                </Button>
+                            </WrapPanel>
+
+                            <!-- Items Count (Right Side) -->
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Border Background="#E3F2FD" CornerRadius="6" Padding="10,6">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="العناصر:" FontSize="12" Foreground="#1976D2" 
+                                                  FontWeight="SemiBold" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding LeftItems.Count}" FontSize="14" FontWeight="Bold" 
+                                                  Foreground="{StaticResource PrimaryBrush}" Margin="6,0,0,0" 
+                                                  VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Products Grid -->
+                    <ScrollViewer x:Name="ProductsScrollViewer"
+                                 HorizontalScrollBarVisibility="Disabled" 
+                                 VerticalScrollBarVisibility="Auto" 
+                                 Padding="12"
+                                 CanContentScroll="False"
+                                 IsDeferredScrollingEnabled="False"
+                                 PanningMode="VerticalOnly"
+                                 ScrollChanged="ProductsScrollViewer_ScrollChanged">
+                        <ItemsControl x:Name="ProductsItemsControl"
+                                     SizeChanged="ProductsItemsControl_SizeChanged"
+                                     ItemsSource="{Binding LeftItems}" 
+                                     ItemTemplateSelector="{StaticResource LeftItemTemplateSelector}"
+                                     VirtualizingPanel.IsVirtualizing="True"
+                                     VirtualizingPanel.VirtualizationMode="Recycling">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel x:Name="ProductsWrapPanel" Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+
+            <!-- Right: Cart & Checkout -->
+            <Border Grid.Column="2" Background="{StaticResource SurfaceBrush}" CornerRadius="12" Padding="16">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.06" />
+                </Border.Effect>
+                <DockPanel>
+                    <!-- Cart Header -->
+                    <Border DockPanel.Dock="Top" Background="#FAFAFA" CornerRadius="8" Padding="16,12" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Cart" Width="24" Height="24" 
+                                                        Foreground="{StaticResource PrimaryBrush}" 
+                                                        VerticalAlignment="Center" Margin="0,0,10,0" />
+                                <TextBlock FontSize="18" FontWeight="Bold" 
+                                          Foreground="#263238" VerticalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="سلة المشتريات" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ShowingSuspendedCarts}" Value="True">
+                                                    <Setter Property="Text" Value="السلات المعلقة" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <Border Background="#E8F5E9" CornerRadius="6" Padding="8,4" Margin="10,0,0,0">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ShowingSuspendedCarts}" Value="True">
+                                                    <Setter Property="Background" Value="#E3F2FD" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock FontSize="12" FontWeight="Bold">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#388E3C" />
+                                                <Setter Property="Text" Value="{Binding CartItems.Count, StringFormat={}{0} عنصر}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ShowingSuspendedCarts}" Value="True">
+                                                        <Setter Property="Foreground" Value="#1976D2" />
+                                                        <Setter Property="Text" Value="{Binding SuspendedCarts.Count, StringFormat={}{0} سلة}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- زر إخفاء/إظهار عمود نوع السعر -->
+                            <Button Grid.Column="1"
+                                    Command="{Binding TogglePriceTypeColumnCommand}"
+                                    ToolTip="إخفاء/إظهار عمود نوع السعر"
+                                    Cursor="Hand" Width="34" Height="34"
+                                    BorderThickness="1" BorderBrush="#CBD5E1"
+                                    VerticalAlignment="Center">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                        <Setter Property="Background" Value="#E3F2FD"/>
+                                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPriceTypeColumnVisible}" Value="False">
+                                                <Setter Property="Background" Value="#FCE4EC"/>
+                                                <Setter Property="Foreground" Value="#C62828"/>
+                                                <Setter Property="BorderBrush" Value="#EF9A9A"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <materialDesign:PackIcon Width="18" Height="18">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="TagOutline"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsPriceTypeColumnVisible}" Value="False">
+                                                    <Setter Property="Kind" Value="TagOffOutline"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Cart DataGrid -->
+                    <DataGrid x:Name="CartDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding CartItems}"
+                              SizeChanged="CartDataGrid_SizeChanged"
+                              Visibility="{Binding ShowingCart, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Height="364" Margin="0,0,0,12"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Auto"
+                              AutoGenerateColumns="False" 
+                              CanUserAddRows="False" 
+                              CanUserResizeRows="False"
+                              CanUserReorderColumns="False"
+                              SelectionMode="Single"
+                              AlternatingRowBackground="#FAFAFA"
+                              GridLinesVisibility="Horizontal"
+                              RowHeight="48" 
+                              HeadersVisibility="Column"
+                              Background="White"
+                              BorderThickness="0"
+                              FontSize="13"
+                              EnableRowVirtualization="False"
+                              VirtualizingPanel.IsVirtualizing="False"
+                              ScrollViewer.CanContentScroll="True">
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridRowHeader">
+                                <Setter Property="Width" Value="0"/>
+                            </Style>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#FAFAFA" />
+                                <Setter Property="Foreground" Value="#37474F" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="FontSize" Value="12" />
+                                <Setter Property="Padding" Value="10,8" />
+                                <Setter Property="BorderThickness" Value="0,0,0,2" />
+                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="ProductNameColumn" Header="المنتج" Binding="{Binding Name}" Width="*" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Padding" Value="10,0" />
+                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                        <Setter Property="FontSize" Value="13" />
+                                        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                        <Setter Property="ToolTip" Value="{Binding Name}" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <!-- Price Type Column -->
+                            <DataGridTemplateColumn x:Name="PriceTypeColumn" Header="نوع السعر" Width="110">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox SelectedItem="{Binding SelectedPriceType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                  FontSize="11" BorderThickness="0" Background="Transparent"
+                                                  VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                                                  Cursor="Hand">
+                                            <ComboBox.Resources>
+                                                <ObjectDataProvider x:Key="PriceTypes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+                                                    <ObjectDataProvider.MethodParameters>
+                                                        <x:Type TypeName="models:PriceType"/>
+                                                    </ObjectDataProvider.MethodParameters>
+                                                </ObjectDataProvider>
+                                            </ComboBox.Resources>
+                                            <ComboBox.ItemsSource>
+                                                <x:Array Type="{x:Type models:PriceType}">
+                                                    <models:PriceType>Retail</models:PriceType>
+                                                    <models:PriceType>Wholesale</models:PriceType>
+                                                    <models:PriceType>Installment</models:PriceType>
+                                                </x:Array>
+                                            </ComboBox.ItemsSource>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock>
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding}" Value="Retail">
+                                                                        <Setter Property="Text" Value="تجزئة"/>
+                                                                        <Setter Property="Foreground" Value="#388E3C"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding}" Value="Wholesale">
+                                                                        <Setter Property="Text" Value="جملة"/>
+                                                                        <Setter Property="Foreground" Value="#1565C0"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding}" Value="Installment">
+                                                                        <Setter Property="Text" Value="تقسيط"/>
+                                                                        <Setter Property="Foreground" Value="#6A1B9A"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Quantity Column -->
+                            <DataGridTemplateColumn x:Name="QuantityColumn" Header="الكمية" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid HorizontalAlignment="Center">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="24"/>
+                                                <ColumnDefinition Width="44"/>
+                                                <ColumnDefinition Width="24"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Button Grid.Column="0" Content="-" Width="22" Height="22"
+                                                   FontSize="14" FontWeight="Bold"
+                                                   Background="#FF6B6B" Foreground="White"
+                                                   BorderThickness="0"
+                                                   Click="DecreaseQuantity_Click" Tag="{Binding}"
+                                                   Cursor="Hand" Padding="0">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Border Background="{TemplateBinding Background}" 
+                                                                           CornerRadius="4">
+                                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Opacity" Value="0.9"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+
+                                            <TextBox Grid.Column="1" 
+                                                     Text="{Binding Quantity, StringFormat=N2, UpdateSourceTrigger=LostFocus}"
+                                                     FontSize="12" FontWeight="Bold"
+                                                     TextAlignment="Center"
+                                                     BorderThickness="1" BorderBrush="#CFD8DC"
+                                                     Background="White" Padding="2"
+                                                     PreviewTextInput="QuantityTextBox_PreviewTextInput"
+                                                     GotFocus="QuantityTextBox_GotFocus"
+                                                     Tag="{Binding}" />
+
+                                            <Button Grid.Column="2" Content="+" Width="22" Height="22"
+                                                   FontSize="14" FontWeight="Bold"
+                                                   Background="#4CAF50" Foreground="White"
+                                                   BorderThickness="0"
+                                                   Click="IncreaseQuantity_Click" Tag="{Binding}"
+                                                   Cursor="Hand" Padding="0">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Border Background="{TemplateBinding Background}" 
+                                                                           CornerRadius="4">
+                                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Opacity" Value="0.9"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Custom Price Column -->
+                            <DataGridTemplateColumn x:Name="CustomPriceColumn" Header="الثمن" Width="90"
+                                Visibility="{Binding DataContext.CanEditCartPrice, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding CustomPrice, StringFormat=N2, UpdateSourceTrigger=LostFocus}"
+                                                 FontSize="12" FontWeight="Bold"
+                                                 TextAlignment="Center"
+                                                 BorderThickness="1" BorderBrush="#FF9800"
+                                                 Background="#FFF8E1"
+                                                 Padding="4,2"
+                                                 PreviewTextInput="PriceTextBox_PreviewTextInput"
+                                                 GotFocus="PriceTextBox_GotFocus"
+                                                 Tag="{Binding}">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsPiece}" Value="False">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Total Column -->
+                            <DataGridTemplateColumn x:Name="TotalColumn" Header="الإجمالي" Width="85">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding TotalPrice, StringFormat={}{0:N2}}"
+                                                   FontWeight="Bold" FontSize="13"
+                                                   Foreground="#388E3C"
+                                                   TextAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Padding="8,0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+
+                    <!-- Suspended Carts List -->
+                    <Border DockPanel.Dock="Top" Height="340" Margin="0,0,0,12"
+                            Visibility="{Binding ShowingSuspendedCarts, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Background="White">
+                        <ListBox ItemsSource="{Binding SuspendedCarts}" BorderThickness="0" Background="Transparent"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="8" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <Border Background="{TemplateBinding Background}" 
+                                                       BorderBrush="{TemplateBinding BorderBrush}"
+                                                       BorderThickness="{TemplateBinding BorderThickness}"
+                                                       CornerRadius="8" Padding="16,12">
+                                                    <ContentPresenter />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Background" Value="#FAFAFA" />
+                                    <Setter Property="BorderBrush" Value="#E0E0E0" />
+                                    <Setter Property="BorderThickness" Value="1" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#E3F2FD" />
+                                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#E3F2FD" />
+                                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                                            <Setter Property="BorderThickness" Value="2" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock FontSize="14" FontWeight="Bold" Foreground="#263238">
+                                                <Run Text="سلة #" />
+                                                <Run Text="{Binding Id, StringFormat={}{0:000000}}" />
+                                            </TextBlock>
+                                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                                <materialDesign:PackIcon Kind="Package" Width="16" Height="16" 
+                                                                        Foreground="#607D8B" VerticalAlignment="Center" Margin="0,0,6,0" />
+                                                <TextBlock Text="{Binding Items.Count, StringFormat={}{0} منتجات}" 
+                                                          FontSize="12" Foreground="#607D8B" VerticalAlignment="Center" />
+                                                <TextBlock Text=" • " FontSize="12" Foreground="#CFD8DC" Margin="6,0" />
+                                                <materialDesign:PackIcon Kind="Clock" Width="16" Height="16" 
+                                                                        Foreground="#607D8B" VerticalAlignment="Center" Margin="0,0,6,0" />
+                                                <TextBlock Text="{Binding CreatedAt, StringFormat={}{0:HH:mm}}" 
+                                                          FontSize="12" Foreground="#607D8B" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                        
+                                        <Button Grid.Column="1" Content="استرجاع" Padding="16,8"
+                                                Background="{StaticResource PrimaryBrush}" Foreground="White"
+                                                FontSize="13" FontWeight="SemiBold" Cursor="Hand"
+                                                Command="{Binding DataContext.ResumeSuspendedCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Opacity" Value="0.9" />
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Border>
+
+                    <!-- Total & Checkout -->
+                    <Border DockPanel.Dock="Bottom" Background="#FAFAFA" CornerRadius="8" Padding="16" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="12" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Total Display -->
+                            <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" CornerRadius="10" Padding="16,14">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.2" />
+                                </Border.Effect>
+                                <Grid>
+                                    <TextBlock Text="الإجمالي الكلي" Foreground="White" Opacity="0.9" 
+                                              FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Right" 
+                                              VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding TotalSum, StringFormat={}{0:N2} د.م}" 
+                                              Foreground="White" FontSize="32" FontWeight="Bold" 
+                                              HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+
+                            <!-- Checkout Control -->
+                            <views:CheckoutControl Grid.Row="2" DataContext="{Binding CheckoutVM}" 
+                                                  Loaded="CheckoutControl_Loaded" Margin="0,0,0,39" />
+                        </Grid>
+                    </Border>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <!-- 📊 Status Bar -->
+        <Border Grid.Row="2" Background="{StaticResource SurfaceBrush}" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+            <Grid Margin="12,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Account" Width="16" Height="16" 
+                                            Foreground="{StaticResource PrimaryBrush}" Margin="0,0,6,0" />
+                    <TextBlock FontSize="12" FontWeight="SemiBold" Foreground="#455A64">
+                        <Run Text="المستخدم: "/>
+                        <Run Text="{Binding CurrentUserName, Mode=OneWay}"/>
+                        <Run Text=" ("/>
+                        <Run Text="{Binding CurrentUserRole, Mode=OneWay}"/>
+                        <Run Text=")"/>
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- ✅ عنوان API للهاتف - وسط الشريط -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <materialDesign:PackIcon Kind="Wifi" Width="16" Height="16"
+                                            Foreground="#2196F3" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                    <TextBlock FontSize="12" FontWeight="SemiBold" Foreground="#455A64"
+                               VerticalAlignment="Center">
+                        <Run Text="API الهاتف: "/>
+                        <Run Text="{Binding ApiUrl, Mode=OneWay}" Foreground="#2196F3" FontWeight="Bold"/>
+                    </TextBlock>
+                    <Button x:Name="CopyApiUrlBtn" Click="CopyApiUrl_Click"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            Width="24" Height="24" Margin="4,0,0,0"
+                            ToolTip="نسخ الرابط">
+                        <materialDesign:PackIcon Kind="ContentCopy" Width="14" Height="14" Foreground="#607D8B"/>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Database" Width="16" Height="16" 
+                                            Foreground="{StaticResource SuccessBrush}" Margin="0,0,6,0" />
+                    <TextBlock Text="قاعدة البيانات: متصلة" FontSize="12" FontWeight="Bold" 
+                              Foreground="{StaticResource SuccessBrush}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

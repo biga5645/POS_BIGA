@@ -1,0 +1,318 @@
+<Page
+      x:Class="POS_BIGA.Views.Pages.UnitsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local="clr-namespace:POS_BIGA.Views.Pages"
+      mc:Ignorable="d"
+      Title="إدارة الوحدات"
+      FlowDirection="RightToLeft"
+      Background="#F5F7FA">
+
+    <Page.Resources>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" Opacity="0.15" Color="#000000"/>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#E74C3C"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#3498DB"/>
+        <SolidColorBrush x:Key="SuccessBrush" Color="#27AE60"/>
+        <SolidColorBrush x:Key="WarningBrush" Color="#F39C12"/>
+        <SolidColorBrush x:Key="InfoBrush" Color="#1ABC9C"/>
+
+        <local:UnitIconConverter x:Key="UnitIconConverter"/>
+        <local:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+    </Page.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- رأس الصفحة -->
+
+        <!-- إحصائية -->
+
+        <!-- التخطيط الأفقي: الجدول + التعديل -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="600"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="380" MaxWidth="450"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- جدول الوحدات -->
+            <materialDesign:Card Grid.Column="0" Padding="0" UniformCornerRadius="12" Effect="{StaticResource CardShadow}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#ECF0F1" Padding="20,12" CornerRadius="12,12,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Table" Width="20" Height="20" Foreground="#34495E" Margin="0,0,10,0"/>
+                            <TextBlock Text="قائمة الوحدات" FontSize="15" FontWeight="SemiBold" Foreground="#34495E"/>
+                            <TextBlock Text="{Binding Units.Count, StringFormat=' ({0})'}" FontSize="13" Foreground="#7F8C8D" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Grid Grid.Row="1">
+                        <DataGrid ItemsSource="{Binding Units}"
+                                  SelectedItem="{Binding SelectedUnit, Mode=TwoWay}"
+                                  SelectionChanged="DataGrid_SelectionChanged"
+                                  MouseDoubleClick="DataGrid_MouseDoubleClick"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  CanUserResizeRows="False"
+                                  CanUserSortColumns="True"
+                                  CanUserReorderColumns="False"
+                                  IsReadOnly="False"
+                                  SelectionMode="Single"
+                                  SelectionUnit="FullRow"
+                                  EnableRowVirtualization="False"
+                                  RowHeaderWidth="0"
+                                  FrozenColumnCount="2"
+                                  HeadersVisibility="All"
+                                  GridLinesVisibility="Horizontal"
+                                  AlternatingRowBackground="#F8F9FA"
+                                  RowHeight="60"
+                                  FontSize="13"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
+                                  ColumnWidth="Auto"
+                                  ScrollViewer.CanContentScroll="True"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  materialDesign:DataGridAssist.CellPadding="10"
+                                  materialDesign:DataGridAssist.ColumnHeaderPadding="10"
+                                  Visibility="{Binding Units.Count, Converter={StaticResource CountToVisibilityConverter}, ConverterParameter=Inverse}">
+
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Height" Value="60"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#E3F2FD"/>
+                                            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                            <Setter Property="BorderThickness" Value="3,0,0,0"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#F5F5F5"/>
+                                            <Setter Property="BorderBrush" Value="{StaticResource InfoBrush}"/>
+                                            <Setter Property="BorderThickness" Value="1,0,0,0"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="ID" Width="70" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#E3F2FD" Padding="6,4" CornerRadius="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Id}" FontWeight="Bold" Foreground="{StaticResource InfoBrush}" FontSize="13"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Header="أيقونة" Width="80" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#FFF3CD" CornerRadius="6" Padding="8,4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Abbreviation, Converter={StaticResource UnitIconConverter}}" FontSize="22"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="اسم الوحدة" Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+
+                                <DataGridTemplateColumn Header="الاختصار" Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{StaticResource AccentBrush}" CornerRadius="4" Padding="10,4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Abbreviation}" FontWeight="Bold" FontSize="14" Foreground="White"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Header="الحالة" Width="140" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="6,2" CornerRadius="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="#FFE5E5"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding AllowCustomPrice}" Value="True">
+                                                                <Setter Property="Background" Value="#E5F5E5"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <materialDesign:PackIcon Width="14" Height="14" VerticalAlignment="Center" Margin="0,0,4,0">
+                                                        <materialDesign:PackIcon.Style>
+                                                            <Style TargetType="materialDesign:PackIcon">
+                                                                <Setter Property="Kind" Value="CheckCircle"/>
+                                                                <Setter Property="Foreground" Value="#27AE60"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding AllowCustomPrice}" Value="False">
+                                                                        <Setter Property="Kind" Value="CloseCircle"/>
+                                                                        <Setter Property="Foreground" Value="#E74C3C"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </materialDesign:PackIcon.Style>
+                                                    </materialDesign:PackIcon>
+
+                                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" FontSize="11">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Text" Value="مفعّل"/>
+                                                                <Setter Property="Foreground" Value="#27AE60"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding AllowCustomPrice}" Value="False">
+                                                                        <Setter Property="Text" Value="معطّل"/>
+                                                                        <Setter Property="Foreground" Value="#E74C3C"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Header="إجراءات" Width="80" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <Button Width="28" Height="28" Margin="0,0,2,0"
+                                                        Style="{StaticResource MaterialDesignIconButton}"
+                                                        ToolTip="تعديل"
+                                                        Command="{Binding DataContext.SelectForEditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}">
+                                                    <materialDesign:PackIcon Kind="Pencil" Width="14" Height="14" Foreground="{StaticResource AccentBrush}"/>
+                                                </Button>
+                                                <Button Width="28" Height="28"
+                                                        Style="{StaticResource MaterialDesignIconButton}"
+                                                        ToolTip="حذف"
+                                                        Command="{Binding DataContext.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}">
+                                                    <materialDesign:PackIcon Kind="Delete" Width="14" Height="14" Foreground="{StaticResource WarningBrush}"/>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <Border Background="#F8F9FA" Padding="40" MinHeight="300"
+                                Visibility="{Binding Units.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="PackageVariantRemove" Width="60" Height="60" Foreground="#BDC3C7" Margin="0,0,0,16"/>
+                                <TextBlock Text="لا توجد وحدات" FontSize="18" FontWeight="Bold" Foreground="#7F8C8D" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- فاصل عمودي -->
+            <Border Grid.Column="1" Width="1" Background="#E0E0E0" Margin="12,0"/>
+
+            <!-- الجانب الأيمن: المعلومات والتعديل -->
+            <StackPanel Grid.Column="2" Margin="12,0,0,0">
+                <!-- معلومات الوحدة -->
+                <materialDesign:Card Padding="12" UniformCornerRadius="10" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="الوحدة المحددة" FontWeight="SemiBold" FontSize="12" Opacity="0.7" Margin="0,0,0,8"/>
+                        <TextBlock Text="{Binding SelectedUnit.Name, TargetNullValue='—'}" FontWeight="Bold" FontSize="14" Foreground="#1E293B"/>
+                        
+                        <TextBlock Text="آخر تحديث" FontSize="11" Opacity="0.7" Margin="0,12,0,4"/>
+                        <TextBlock Text="{Binding LastUpdateTime, StringFormat={}{0:HH:mm:ss}}" FontSize="12" Foreground="#64748B"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- قسم التعديل -->
+                <materialDesign:Card Padding="14" UniformCornerRadius="10" Effect="{StaticResource CardShadow}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="600">
+                        <StackPanel>
+                            <TextBlock Text="إضافة / تعديل" FontWeight="SemiBold" FontSize="12" Opacity="0.7" Margin="0,0,0,12"/>
+
+                            <TextBlock Text="الاسم" FontSize="10" Opacity="0.6" Margin="0,0,0,2"/>
+                            <TextBox Text="{Binding NewUnitName, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="اسم جديد"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Margin="0,0,0,10"
+                                     FontSize="11"/>
+
+                            <TextBlock Text="الاختصار" FontSize="10" Opacity="0.6" Margin="0,0,0,2"/>
+                            <TextBox Text="{Binding NewUnitAbbrev, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="كجم"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Margin="0,0,0,12"
+                                     FontSize="11"/>
+
+                            <!-- الأزرار -->
+                            <Button Command="{Binding AddCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Height="34"
+                                    Margin="0,0,0,6"
+                                    Padding="0"
+                                    Background="{StaticResource SuccessBrush}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="Plus" Width="14" Height="14" Margin="0,0,4,0"/>
+                                    <TextBlock Text="إضافة" FontSize="11" FontWeight="Medium"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding EditCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Height="34"
+                                    Margin="0,0,0,6"
+                                    Padding="0"
+                                    BorderBrush="{StaticResource InfoBrush}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="ContentSave" Width="14" Height="14" Margin="0,0,4,0" Foreground="{StaticResource InfoBrush}"/>
+                                    <TextBlock Text="حفظ" FontSize="11" FontWeight="Medium" Foreground="{StaticResource InfoBrush}"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Command="{Binding DeleteCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Height="34"
+                                    Padding="0"
+                                    BorderBrush="{StaticResource WarningBrush}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="Delete" Width="14" Height="14" Margin="0,0,4,0" Foreground="{StaticResource WarningBrush}"/>
+                                    <TextBlock Text="حذف" FontSize="11" FontWeight="Medium" Foreground="{StaticResource WarningBrush}"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- الخيارات -->
+                            <Border Background="#F8F9FA" Padding="10" CornerRadius="6" Margin="0,12,0,0">
+                                <CheckBox IsChecked="{Binding AllowCustomPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          Content="ثمن مخصص"
+                                          FontSize="11"
+                                          ToolTip="السماح بإدخال ثمن مخصص"/>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </materialDesign:Card>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
